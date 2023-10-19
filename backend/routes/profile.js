@@ -1,6 +1,11 @@
 const express = require('express');
 const { getUserInfo, updatePhoto, updateUsername } = require('../controllers/profileController');
 const router = express.Router();
+const { validateJWT } = require("../middlewares/validate-jwt");
+
+
+// Middleware de validación JWT
+router.use(validateJWT);
 
 
 // Ruta para obtener la información del usuario

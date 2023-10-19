@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
-const { generateRandCode } = require("../helpers/generateRandCode");
 
 const boardGameSchema = new mongoose.Schema({
-  photo: String, // URL de la imagen del juego de mesa
+  photo: { type: String }, // URL de la imagen del juego de mesa
   title:  { type: String, required: true },
-  description: { type: String },
+  description: { type: String, required: true },
   objective:  { type: String },
-  rules: { type: String},
+  rules: { type: String, default:""},
   status: {
     type: String,
     enum: ["Disponible", "No disponible"],

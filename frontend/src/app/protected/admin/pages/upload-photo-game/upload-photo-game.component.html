@@ -1,0 +1,15 @@
+<app-header></app-header>
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-semibold mb-4">Subir Foto del Juego</h2>
+    <form>
+      <div class="mb-4">
+        <label for="photo" class="block font-medium mb-2">Selecciona una foto:</label>
+        <input type="file" id="photo" (change)="onFileSelected($event)" accept="image/*" class="w-full p-2 border rounded-lg">
+      </div>
+  
+      <div class="mb-4">
+        <button (click)="uploadPhoto()" class="bg-blue-500 text-white rounded-lg py-2 px-4">Subir Foto</button>
+      </div>
+    </form>
+  </div>
+  

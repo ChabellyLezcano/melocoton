@@ -1,0 +1,47 @@
+<div class="container mt-5">
+    <div class="flex justify-center">
+      <div class="w-1/2">
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h2 class="text-xl font-semibold mb-4">Registro</h2>
+          <form [formGroup]="registerForm" (ngSubmit)="registro()">
+            <div class="mb-4">
+              <label for="username" class="block text-gray-700 font-medium">Nombre de Usuario</label>
+              <input type="text" formControlName="username" id="username" placeholder="Nombre de Usuario"
+                     class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200">
+            </div>
+            <div class="mb-4">
+              <label for="email" class="block text-gray-700 font-medium">Correo Electrónico</label>
+              <input type="email" formControlName="email" id="email" placeholder="email@example.com"
+                     class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200">
+            </div>
+            <div class="mb-4">
+              <label for="password" class="block text-gray-700 font-medium">Contraseña</label>
+              <input type="password" formControlName="password" id="password" placeholder="Contraseña"
+                     class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200">
+            </div>
+            <div class="mb-4">
+              <label for="validatePassword" class="block text-gray-700 font-medium">Confirmar Contraseña</label>
+              <input type="password" formControlName="validatePassword" id="validatePassword" placeholder="Confirmar Contraseña"
+                     class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200">
+            </div>
+            <div class="mb-4">
+              <label for="role" class="block text-gray-700 font-medium">Rol</label>
+              <select formControlName="role" id="role"
+                      class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200">
+                <option value="Admin">Admin</option>
+                <option value="Current">Current</option>
+              </select>
+            </div>
+            <button type="submit" class="w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600"
+                    [disabled]="registerForm.invalid">Registrarse
+            </button>
+          </form>
+          <div class="mt-4">
+            ¿Ya tienes una cuenta? <a routerLink="/auth/login"
+                                     class="text-indigo-500 hover:underline">Iniciar sesión aquí</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

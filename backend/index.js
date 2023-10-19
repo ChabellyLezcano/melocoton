@@ -6,7 +6,8 @@ const http = require("http");
 const socketIo = require("socket.io");
 
 const { dbConnection } = require("./config/database");
-const configureCloudinary = require ("./config/cloudinary")
+const configureCloudinary = require ("./config/cloudinary");
+const Boardgame = require("./models/Boardgame");
 require("dotenv").config();
 
 // Crear la aplicación de express

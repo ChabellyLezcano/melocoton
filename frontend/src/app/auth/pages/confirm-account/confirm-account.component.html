@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <div class="flex justify-center">
+      <div class="w-1/2">
+        <div *ngIf="isLoading; else loadingContent" class="bg-blue-200 shadow-md rounded-lg p-6">
+          <p>Esperando el resultado...</p>
+        </div>
+  
+        <ng-container *ngIf="!isLoading; else loadingContent">
+          <!-- Esta parte se mostrará cuando isLoading sea falso -->
+          <div [ngClass]="{'bg-green-200': confirmacionExitosa, 'bg-red-200': !confirmacionExitosa}" class="shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">
+              Confirmación de Cuenta
+            </h2>
+  
+            <!-- Contenido para confirmación exitosa -->
+            <ng-container *ngIf="confirmacionExitosa; else errorContent">
+              <p class="text-green-600 font-semibold">
+                ¡La cuenta se confirmó con éxito!
+              </p>
+              <a (click)="onLoginClick()" class="text-indigo-500 hover:underline cursor-pointer">
+                Iniciar sesión
+              </a>
+            </ng-container>
+  
+            <!-- Contenido para error en la confirmación -->
+            <ng-template #errorContent>
+              <p class="text-red-600 font-semibold">
+                Ha ocurrido un error al confirmar la cuenta.
+              </p>
+            </ng-template>
+          </div>
+        </ng-container>
+  
+        <!-- Contenido de carga -->
+        <ng-template #loadingContent>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  

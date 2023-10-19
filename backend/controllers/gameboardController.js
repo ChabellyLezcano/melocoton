@@ -37,7 +37,6 @@ const createBoardGame = async (req, res) => {
 
     // Si no existe un juego de mesa con el mismo nombre, creamos uno nuevo
     const newBoardGame = new BoardGame({
-      photo: req.file ? req.file.path : undefined,
       title,
       description,
       status,
@@ -46,6 +45,8 @@ const createBoardGame = async (req, res) => {
       tags,
       code, // Add the generated code to the game
     });
+
+    console.log(newBoardGame)
 
     const createdGame = await newBoardGame.save();
 
@@ -114,6 +115,8 @@ const editBoardGame = async (req, res) => {
     const gameData = req.body;
 
     game.set(gameData);
+
+    console.log(gameData)
 
     // Guardamos el juego de mesa actualizado en la base de datos
     await game.save();

@@ -7,26 +7,23 @@ const {
   forgotPassword,
   checkToken,
   newPassword,
+  revalidateToken,
+  userIsAdmin,
 } = require("../controllers/authController");
 
 const { validateFields } = require("../middlewares/validate-fields");
+const { validateJWT } = require("../middlewares/validate-jwt");
 
 const router = Router();
 
-// Route to create a new user
+// Registro del usuario
 router.post(
-  "/registro",
-  [
-    check("username", "Username is required").not().isEmpty(),
-    check("email", "Please enter a valid email address").isEmail(),
-    check("password", "Password must be at least 6 characters long").isLength({ min: 6 }),
-    check("role", "Role is required").not().isEmpty(),
-  ],
+  "/register",
   validateFields,
   createUser
 );
 
-// Route for user login
+// Login
 router.post(
   "/",
   [
@@ -37,30 +34,37 @@ router.post(
   loginUser
 );
 
-// Route to confirm the account
+// Confirmar cuenta
 router.get("/confirm-account/:token", confirmAccount);
 
-// Route to recover the account
+// Olvidé paswword
 router.post(
   "/forgot-password",
-  [
-    check("email", "Please enter a valid email address").isEmail(),
-  ],
+  [check("email", "Please enter a valid email address").isEmail()],
   validateFields,
   forgotPassword
 );
 
-// Route to confirm a token
-router.get("/check-token/:token", checkToken);
-
-// Route to set a new password
+// Restablecer token
 router.post(
   "/reset-password/:token",
   [
-    check("newPassword", "New password must be at least 6 characters long").isLength({ min: 6 }),
+    check(
+      "newPassword",
+      "New password must be at least 6 characters long"
+    ).isLength({ min: 6 }),
   ],
   validateFields,
   newPassword
 );
+
+// Verificar Token
+router.get("/check-token/:token", checkToken);
+
+// Validar y revalidar token
+router.get("/renew", validateJWT, revalidateToken);
+
+router.get('/user-is-admin', validateJWT, userIsAdmin);
+
 
 module.exports = router;

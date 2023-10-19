@@ -9,6 +9,7 @@ const {
 const generateID = require("../helpers/generateId");
 const { randomImage } = require("../helpers/randomImage");
 
+
 // Registro
 const createUser = async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -33,9 +34,12 @@ const createUser = async (req, res) => {
         msg: "El usuario ya existe con ese nombre de usuario",
       });
     }
+    // Get random Image
+    const image = randomImage();
 
     // New user model
     const dbUser = new User({
+      photo: image,
       username,
       email,
       password,
@@ -56,8 +60,7 @@ const createUser = async (req, res) => {
     // Update user token
     dbUser.token = token;
 
-    // Get random Image
-    const image = randomImage();
+    
 
     // Save user
     await dbUser.save();
@@ -104,7 +107,7 @@ const loginUser = async (req, res) => {
     if (!dbUser.authenticated) {
       return res.status(401).json({
         ok: false,
-        msg: "La cuenta no ha sido confirmadas. Por favor, verifique su correo electrónico",
+        msg: "La cuenta no ha sido confirmada. Por favor, verifique su correo electrónico",
       });
     }
 
@@ -133,6 +136,9 @@ const loginUser = async (req, res) => {
       msg: "Inició de sesión correcto",
       _id: dbUser.id,
       email: dbUser.email,
+      role: dbUser.role,
+      username: dbUser.username,
+      photo: dbUser.photo,
       token,
     });
   } catch (error) {
@@ -148,13 +154,13 @@ const loginUser = async (req, res) => {
 
 // Confirmar cuenta
 const confirmAccount = async (req, res) => {
-  const { token } = req.params; // Get the token from the URL
+  const { token } = req.params; // Capturar el token de la url o header
 
   try {
-    // Find a user in the database with the provided token.
+    // Buscar un usuario en la base de dato que tenga el token capturado de la petición
     const user = await User.findOne({ token: token });
 
-    // Verify if a user with the token was found.
+    // Verificar si no existe el usuario en la db
     if (!user) {
       return res.status(400).json({
         ok: false,
@@ -162,18 +168,18 @@ const confirmAccount = async (req, res) => {
       });
     }
 
-    // Set the 'authenticated' field of the user to true to confirm the account.
+    // Establecer authenticated en true si se confirma correctamente la cuenta
     user.authenticated = true;
 
-    // Set the token in the database to null.
+    // Poner el token a null
     user.token = null;
 
-    // Save the changes in the database.
+    // Guardar cambios en la db
     await user.save();
 
     await sendWelcomeEmail(user.email, user.username);
 
-    // Render the confirmation view and send it to the client
+    // Enviar respuesta exitosa
     res.status(200).json({
       ok: true,
       msg: "Cuenta confirmada exitosamente",
@@ -194,7 +200,7 @@ const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    // Find user with email from req.body
+    // Buscar si existe un usuario con el email proporcionado
     const dbUser = await User.findOne({ email });
 
     if (!dbUser) {
@@ -204,7 +210,7 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    // Check if the password has been used before
+    // Comprobar si la contraseña ha sido utilizada anteriormente
     if (newPassword === dbUser.password) {
       return res.status(400).json({
         ok: false,
@@ -212,17 +218,17 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    // Generate new token
-    const token = generateID(); // Reemplaza con tu propia lógica para generar tokens únicos y seguros.
+    // Generar un token para restablecerla
+    const token = generateID();
 
-    // Save token in the user account
+    // Guardar el token en la db
     dbUser.token = token;
     await dbUser.save();
 
-    // Send email to reset password
+    // Enviar email para establecer contraeña
     await sendEmailResetPassword(email, token);
 
-    // Render response to the client
+    // Enviar respuesta exitosa
     res.status(200).json({
       msg: "Se ha enviado un correo electrónico para restablecer la contraseña.",
       ok: true,
@@ -326,6 +332,61 @@ const checkToken = async (req, res) => {
   }
 };
 
+const revalidateToken = async (req, res) => {
+  const userId  = req.id;
+
+  // Generar el JWT
+  const token = await generateJWT(userId);
+
+  const user = await User.findById(userId)
+
+  return res.json({
+    ok: true,
+    _id: userId,
+    token,
+    role: user.role,
+    email: user.email,
+    username: user.username,
+    photo: user.photo,
+    msg: 'Sesión renovada',
+  });
+};
+
+const userIsAdmin = async (req, res) => {
+  const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        ok: false,
+        msg: "El usuario no existe"
+      });
+    }
+
+    if (user.role === 'admin') {
+      // El usuario es un administrador
+      return res.status(200).json({
+        ok: true,
+        msg: 'Eres un administrador. Acceso permitido.'
+      });
+    } else {
+      // El usuario no es un administrador
+      return res.status(403).json({
+        ok: false,
+        msg: 'No eres un administrador. Acceso denegado.'
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Error en el servidor"
+    });
+  }
+};
+
+
 module.exports = {
   createUser,
   loginUser,
@@ -333,4 +394,6 @@ module.exports = {
   forgotPassword,
   checkToken,
   newPassword,
+  revalidateToken,
+  userIsAdmin
 };

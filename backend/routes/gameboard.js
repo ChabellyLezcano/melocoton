@@ -2,9 +2,6 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 const upload = require("../middlewares/upload");
 const router = Router();
-
-const {uploadMultipleImages} = require('../middlewares/upload')
-
 const {
   createBoardGame,
   deleteBoardGame,
@@ -52,12 +49,12 @@ router.put(
 router.delete("/delete-game/:id", deleteBoardGame);
 
 // List available board games
-router.get("/get-games", getBoardGames);
+router.get("/games", getBoardGames);
 
 // Get a single board game by ID
 router.get("/get-single-game/:id", getBoardGameById);
 
-router.put('/boardgames/:id', upload.single('photo'), updateBoardGamePhoto);
+router.put('/upload-photo/:id', upload.single('photo'), updateBoardGamePhoto);
 
 router.put('/add-gallery-image/:id',upload.array('image'), updateBoardGameGalleryImages);
 

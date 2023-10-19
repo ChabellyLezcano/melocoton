@@ -1,0 +1,25 @@
+<div class="bg-white shadow-md text-black py-3 mb-4 px-4">
+    <!-- Elimina el contenedor mx-auto para que ocupe toda la anchura -->
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <div class="text-2xl font-bold">
+        <img src="../../../../assets/icono.ico" alt="Logo" class="h-20 w-42 inline mr-2"> 
+      </div>
+      
+      <!-- Contenedor del usuario -->
+      <div class="flex items-center space-x-4">
+        <!-- Ícono de estrella (con color azul) y mensaje de título -->
+        <i class="pi pi-star-fill text-xl text-blue-500 cursor-pointer" title="Usuario administrador" *ngIf="isAdmin"></i>
+        
+        <!-- Nombre de usuario -->
+        <span class="hidden sm:inline">{{ user?.username }}</span>
+  
+        <!-- Foto de perfil del usuario -->
+        <img [src]="user?.photo" alt="Foto de perfil" class="h-11 w-12 rounded-full">
+        
+        <!-- Ícono de engranaje de PrimeNG -->
+        <i class="pi pi-cog text-xl cursor-pointer"></i>
+      </div>
+    </div>
+  </div>
+  

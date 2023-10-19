@@ -1,0 +1,41 @@
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-semibold mb-4">Añadir Juego</h2>
+    <form [formGroup]="gameForm" (ngSubmit)="createGame()"> 
+        <div>
+          <label for="title" class="block font-medium">Título:</label>
+          <input type="text" id="title" formControlName="title" class="w-full border rounded-lg p-2" required>
+        </div>
+     
+  
+      <div>
+        <label for="description" class="block font-medium">Descripción:</label>
+        <textarea id="description" formControlName="description" class="w-full border rounded-lg p-2" required></textarea>
+      </div>
+  
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        
+        <div>
+          <label for="tags" class="block font-medium">Etiquetas:</label>
+          <input type="text" id="tags" formControlName="tags" class="w-full border rounded-lg p-2" required>
+        </div>
+      </div>
+  
+      <div>
+        <label for="reglas" class="block font-medium">Reglas:</label>
+        <textarea id="reglas" formControlName="reglas" class="w-full border rounded-lg p-2" required></textarea>
+      </div>
+  
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        
+        <div>
+          <label for="objective" class="block font-medium">Objetivo:</label>
+          <input type="text" id="objective" formControlName="objective" class="w-full border rounded-lg p-2">
+        </div>
+      </div>
+  
+      <div class="mt-4">
+        <button type="submit" class="bg-blue-500 text-white rounded-lg py-2 px-4" [disabled]="gameForm.invalid">Añadir Juego</button>
+      </div>
+    </form>
+  </div>
+  
