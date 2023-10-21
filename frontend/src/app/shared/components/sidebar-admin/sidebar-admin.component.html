@@ -1,0 +1,54 @@
+<p-sidebar [(visible)]="sidebarVisible">
+    <ng-template pTemplate="header">
+      <div class="px-4 text-blue-500 m-4">
+        <h3 class="text-2xl font-semibold">Stingray Admin</h3>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <ul class="space-y-8 p-2 ">
+            <li>
+              <a routerLink="/dashboard-admin" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-home text-xl"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/foro" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-comments text-xl"></i>
+                <span>Foro</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/all-reservations-admin" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
+                <i class="pi pi-list text-xl"></i>
+                <span>Historial de Reservas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/blog" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-pencil text-xl"></i>
+                <span>Blog</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/list-users" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-user text-xl"></i>
+                <span>Users</span>
+              </a>
+            </li>
+          </ul>          
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="p-4 text-center px-3">
+            <a (click)="logout()" class="cursor-pointer flex items-center justify-center space-x-2 text-red-500">
+              <span class="text-lg">Logout</span>
+              <i class="pi pi-sign-out text-xl text-red-500"></i>
+            </a>
+          </div>
+          
+      </ng-template>
+      
+  </p-sidebar>
+  
+  <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
+  

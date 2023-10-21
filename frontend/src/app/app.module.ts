@@ -11,6 +11,7 @@ import { UserModule } from './protected/user/user.module';
 import { SharedModule } from 'primeng/api';
 import { AdminModule } from './protected/admin/admin.module';
 
+
 @NgModule({
   declarations: [
     AppComponent

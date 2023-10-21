@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; // Importa ActivatedRoute
-import { GameService } from '../../services/games.service';
+import { GameService } from '../../../services/games.service';
 import Swal from 'sweetalert2';
 
 @Component({

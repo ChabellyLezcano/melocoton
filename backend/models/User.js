@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true },
   token: { type: String, default: null },
   authenticated: { type: Boolean, default: false },
+  accountStatus: {  type: String,
+    enum: [
+      "Active",
+      "Blocked",
+    ], default: "Active" },
 });
 
 const User = mongoose.model("User", userSchema);

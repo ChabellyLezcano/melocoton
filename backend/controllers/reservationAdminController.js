@@ -26,7 +26,7 @@ const getAdminReservationHistory = async (req, res) => {
     }
 
     // Obtener todas las reservas
-    const reservations = await Reservation.find();
+    const reservations = await Reservation.find().populate("user game");
 
     // Actualizar el estado de las reservas vencidas
     for (const reservation of reservations) {
@@ -52,49 +52,21 @@ const getAdminReservationHistory = async (req, res) => {
   }
 };
 
-// Obtener la lista de reservaciones pendientes
-const getPendingReservations = async (req, res) => {
-  try {
-    // Obtener el ID de usuario del administrador desde la solicitud
-    const adminUserId = req.id;
-
-    // Buscar al usuario por su ID
-    const adminUser = await User.findById(adminUserId);
-
-    // Verificar si el usuario es un administrador
-    if (adminUser.role !== "Admin") {
-      return res.status(401).json({
-        ok: false,
-        msg: "Only administrators are allowed to access pending reservations",
-      });
-    }
-
-    // Obtener todas las reservas pendientes de aceptación
-    const pendingReservations = await Reservation.find({
-      status: "Pending acceptance",
-    });
-
-    res.json({
-      ok: true,
-      pendingReservations,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Error fetching pending reservations",
-    });
-  }
-};
-
 // Aceptar reservas
 const acceptReservation = async (req, res) => {
   try {
-    const { reservationId } = req.params; // Obtener el reservationId de req.params
-    const adminUserId = req.id; // ID del administrador que acepta la reserva
+    const { reservationId } = req.params;
+    const adminUserId = req.id;
+    const { expirationDate } = req.body;
 
-    // Buscar al usuario administrador por su id
     const adminUser = await User.findById(adminUserId);
+
+    if (!adminUser) {
+      return res.status(401).json({
+        ok: false,
+        msg: "Only administrators are allowed to accept reservations",
+      });
+    }
 
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
@@ -119,39 +91,67 @@ const acceptReservation = async (req, res) => {
       });
     }
 
-    // Parsear la fecha de expiración desde el formato "DD/MM/AAAA" a un objeto Date
-    const { expirationDate } = req.body;
+    // Verificar si ya existe una reserva "Accepted" para el mismo juego
+    const existingAcceptedReservation = await Reservation.findOne({
+      game: reservation.game,
+      status: "Accepted",
+    });
 
-    reservation.status = "Accepted";
-    reservation.expirationDate = expirationDate;
-
-    // Obtener el email del usuario que realizó la reserva
-    const userWhoReserved = await User.findById(reservation.user);
-    const userEmail = userWhoReserved.email;
-    const username = userWhoReserved.username;
-
-    await reservation.save();
-
-    // Cambiar el estado del juego relacionado a "No disponible"
-    const game = await BoardGame.findById(reservation.game);
-
-    if (game) {
-      game.status = "No disponible";
-      await game.save();
+    if (existingAcceptedReservation) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Another reservation for this game has already been accepted",
+      });
     }
 
-    await sendEmailReservationConfirmation(
-      userEmail,
-      reservation,
-      game,
-      username
-    );
+    const dateParts = expirationDate.split("/");
+    if (dateParts.length === 3) {
+      const day = parseInt(dateParts[0], 10);
+      const month = parseInt(dateParts[1], 10);
+      const year = parseInt(dateParts[2], 10);
 
-    res.json({
-      ok: true,
-      msg: "Reservation accepted successfully",
-      reservation,
-    });
+      if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+        const parsedExpirationDate = new Date(year, month - 1, day);
+        reservation.expirationDate = parsedExpirationDate;
+        reservation.status = "Accepted";
+
+        const userWhoReserved = await User.findById(reservation.user);
+        const userEmail = userWhoReserved.email;
+        const username = userWhoReserved.username;
+
+        await reservation.save();
+
+        const game = await BoardGame.findById(reservation.game);
+
+        if (game) {
+          game.status = "No Disponible";
+          await game.save();
+        }
+
+        await sendEmailReservationConfirmation(
+          userEmail,
+          reservation,
+          game,
+          username
+        );
+
+        res.json({
+          ok: true,
+          msg: "Reservation accepted successfully",
+          reservation,
+        });
+      } else {
+        res.status(400).json({
+          ok: false,
+          msg: "Invalid date format for expirationDate",
+        });
+      }
+    } else {
+      res.status(400).json({
+        ok: false,
+        msg: "Invalid date format for expirationDate",
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -187,7 +187,7 @@ const rejectReservation = async (req, res) => {
       });
     }
 
-    if (reservation.status !== "Pending acceptance") {
+    if (reservation.status !== "Pending acceptance"  && reservation.status !== "Accepted") {
       return res.status(400).json({
         ok: false,
         msg: "Reservation cannot be rejected in its current status",
@@ -321,7 +321,7 @@ const markAsCompleted = async (req, res) => {
     }
 
     reservation.status = "Completed";
-    reservation.deliveredDate = new Date(); // Agregar la fecha actual como fecha de entrega
+    reservation.endDate = new Date(); // Agregar la fecha actual como fecha de entrega
     await reservation.save();
 
     // Obtener el email del usuario que realizó la reserva
@@ -345,11 +345,35 @@ const markAsCompleted = async (req, res) => {
   }
 };
 
+// Obtener reservaciones por estado
+const getReservationsByStatus = async (req, res) => {
+  try {
+    // Obtener el estado de reserva deseado desde la solicitud
+    const { status } = req.params;
+
+    // Obtener todas las reservas con el estado especificado
+    const reservations = await Reservation.find({ status: status }).populate(
+      "user game"
+    );
+
+    res.json({
+      ok: true,
+      reservations,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Error fetching reservations by status",
+    });
+  }
+};
+
 module.exports = {
   getAdminReservationHistory,
   acceptReservation,
   rejectReservation,
   markAsCompleted,
   markAsPickedUp,
-  getPendingReservations,
+  getReservationsByStatus,
 };

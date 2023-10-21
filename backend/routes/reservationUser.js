@@ -13,12 +13,12 @@ const {
 router.use(validateJWT, validateFields);
 
 // Route to create a new reservation
-router.post("/user/add-reservation/:gameId", createReservation);
+router.post("/add-reservation/:gameId", createReservation);
 
 // Route to get the user's reservation history
 router.get("/user/reservations", getUserReservationHistory);
 
 // Route to cancel a reservation by its ID
-router.post("/user/cancel-reservation/:reservationId", cancelReservation);
+router.post("/cancel-reservation/:reservationId", cancelReservation);
 
 module.exports = router;

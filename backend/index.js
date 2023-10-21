@@ -50,6 +50,7 @@ app.use("/api/review", require("./routes/review"));
 app.use("/api/forum", require("./routes/message_forum"));
 app.use("/api/favorite", require("./routes/listFavorite"));
 app.use("/api/recommendation", require("./routes/recommendation"));
+app.use("/api/users", require("./routes/user"));
 
 
 // Inicio del servidor

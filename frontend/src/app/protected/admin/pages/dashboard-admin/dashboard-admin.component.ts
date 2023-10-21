@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/auth/interfaces/authInterface';
 import { AuthServiceTsService } from 'src/app/auth/service/auth.service';
 import { GameService } from '../../services/games.service';
-import { Game } from '../../interfaces/gameResponse';
+import { Game } from '../../interfaces/gameInterface';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +27,12 @@ export class DashboardAdminComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.user;
+    console.log(this.user)
     this.getGames();
+  }
+
+  isGameUnavailable(game: any): boolean {
+    return game.status === "No Disponible";
   }
 
   onPageChange(event: any) {
@@ -42,9 +47,6 @@ export class DashboardAdminComponent implements OnInit {
     this.gameService.getGames(page, this.rows).subscribe(
       (resp) => {
         this.games = resp.games;
-        // Actualiza el número total de registros
-        console.log(resp);
-        console.log(this.user)
       },
       (error) => {
         Swal.fire({
@@ -57,7 +59,6 @@ export class DashboardAdminComponent implements OnInit {
   }
 
   onVerClick(gameId: string) {
-    console.log('onVerClick llamado con gameId:', gameId);
     this.router.navigate(['/game', gameId]);
 
   }

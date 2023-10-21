@@ -15,5 +15,5 @@ const nodemailer = require("nodemailer");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
   }
-  
+
   module.exports = { formatDate, formatTime}

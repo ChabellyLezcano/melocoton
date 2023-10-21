@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../../services/games.service';
-import { GameResponse, Game } from '../../../interfaces/gameResponse';
+import { GameResponse, Game } from '../../../interfaces/gameInterface';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -26,7 +26,7 @@ export class EditGameComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required],
       status: [''],
-      tags: this.fb.array([]), // Puedes usar FormArray si necesitas una lista
+      tags: [''], // Puedes usar FormArray si necesitas una lista
       rules: [''], // Agrega el campo rules
       objective: [''], // Agrega el campo objective
       // Define otros campos del formulario según tus necesidades
@@ -47,6 +47,7 @@ export class EditGameComponent implements OnInit {
           title: gameData.title,
           description: gameData.description,
           status: gameData.status,
+          tags: gameData.tags,
           rules: gameData.rules, // Actualiza el campo rules
           objective: gameData.objective, // Actualiza el campo objective
           // Actualiza otros campos según sea necesario
@@ -64,7 +65,18 @@ export class EditGameComponent implements OnInit {
     formData.append('status', this.editGameForm?.get('status')?.value || '');
     formData.append('rules', this.editGameForm?.get('rules')?.value || '');
     formData.append('objective', this.editGameForm?.get('objective')?.value || '');
-  
+    
+// Divide las etiquetas en elementos individuales
+const tagsValue = this.editGameForm.get('tags')?.value;
+const tagsArray = (typeof tagsValue === 'string') ? tagsValue.split(',').map(tag => tag.trim()) : [];
+
+// Agrega cada etiqueta como un elemento individual en FormData
+tagsArray.forEach(tag => {
+  formData.append('tags[]', tag);
+});
+
+
+
     // Agrega más campos al formData según tus necesidades
   
     this.gameService.updateGame(this.gameId, this.editGameForm.value).subscribe(
@@ -81,5 +93,8 @@ export class EditGameComponent implements OnInit {
       }
     );
   }
-  
+
+  cancelUpdate(){
+    this.router.navigate(['/game', this.gameId]);
+  }
 }

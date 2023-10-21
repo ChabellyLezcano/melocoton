@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ValidarTokenGuard } from './guards/validarToken.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { UserGuard } from './guards/user.guard';
 
 
 const routes: Routes = [
@@ -19,11 +20,10 @@ const routes: Routes = [
   {
     path: 'dashboard-user',
     loadChildren: () => import('./protected/user/user.module').then(m => m.UserModule),
-
+    canActivate: [ValidarTokenGuard, UserGuard], // Aplicadas a rutas principales
+    canLoad: [ValidarTokenGuard],
   
-  },
-  
-  
+  }
 ];
 
 @NgModule({

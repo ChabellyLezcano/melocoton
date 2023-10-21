@@ -51,6 +51,7 @@ const createReservation = async (req, res) => {
       }
     }
 
+
     const newReservation = new Reservation({
       game: gameId,
       user,
@@ -109,8 +110,8 @@ const getUserReservationHistory = async (req, res) => {
 
 const cancelReservation = async (req, res) => {
   try {
-    const { reservationId } = req.params; // Corrige cómo obtienes reservationId
-    const user = req.id; // Assuming user information is available in the request
+    const { reservationId } = req.params;
+    const user = req.id;
 
     const dbUser = await User.findById(user);
 
@@ -122,15 +123,6 @@ const cancelReservation = async (req, res) => {
     }
 
     const reservation = await Reservation.findById(reservationId);
-
-    const game = await BoardGame.findById(reservation.game);
-
-    if (!game) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Game not found",
-      });
-    }
 
     if (!reservation) {
       return res.status(404).json({
@@ -160,7 +152,17 @@ const cancelReservation = async (req, res) => {
 
     await reservation.save();
 
-    // Enviar un correo de confirmación al usuario
+    // Only if the reservation is valid should you attempt to get the game
+    const game = await BoardGame.findById(reservation.game);
+
+    if (!game) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Game not found",
+      });
+    }
+
+    // Send a confirmation email to the user
     await sendEmailCancelReservation(dbUser.email, reservation, game, dbUser.username);
 
     res.json({
@@ -176,6 +178,7 @@ const cancelReservation = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   createReservation,

@@ -243,9 +243,9 @@ const sendEmailReservationPickedUp = async (
         <p>Tu reserva con el código ${
           reservation.code
         } ha sido marcada como recogida.</p>
-        <p>Debes devolver el juego en nuestro horario lectivo antes del ${
-          formatDate(reservation.expirationDate)
-        }.</p>
+        <p>Debes devolver el juego en nuestro horario lectivo antes del ${formatDate(
+          reservation.expirationDate
+        )}.</p>
         <p>Detalles de la reserva:</p>
         <ul>
         <li>Código del juego: ${game.code}</li>
@@ -262,7 +262,6 @@ const sendEmailReservationPickedUp = async (
     console.error("Error al enviar el correo de marcado como recogida:", error);
   }
 };
-
 
 const sendEmailReservationCompleted = async (
   email,
@@ -284,7 +283,7 @@ const sendEmailReservationCompleted = async (
         <ul>
         <li>Código del juego: ${game.code}</li>
         <li>Nombre del juego: ${game.title}</li>
-        <li>Fecha de entrega: ${formatDate(reservation.deliveredDate)}</li>
+        <li>Fecha de entrega: ${formatDate(reservation.endDate)}</li>
         <li>Fecha de expiración: ${formatDate(reservation.expirationDate)}</li>
         <li>Estado de la reserva: ${reservation.status}</li>
         </ul>
@@ -301,6 +300,83 @@ const sendEmailReservationCompleted = async (
   }
 };
 
+const sendChangeToAdminEmail = async (email, username) => {
+  try {
+    const mailOptions = {
+      from: '"Stingray"',
+      to: email,
+      subject: "Tu rol ha sido cambiado a Admin - Stingray",
+      html: `
+        <p>¡Hola ${username}!</p>
+        <p>Tu rol en Stingray ha sido cambiado a "Admin".</p>
+        <p>Si tienes alguna pregunta o inquietud, no dudes en ponerte en contacto con nosotros.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error al enviar el correo de cambio a Admin:", error);
+  }
+};
+
+const sendChangeToCurrentEmail = async (email, username) => {
+  try {
+    const mailOptions = {
+      from: '"Stingray"',
+      to: email,
+      subject: "Tu rol ha sido cambiado a Current - Stingray",
+      html: `
+        <p>¡Hola ${username}!</p>
+        <p>Tu rol en Stingray ha sido cambiado a "Current".</p>
+        <p>Si tienes alguna pregunta o inquietud, no dudes en ponerte en contacto con nosotros.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error al enviar el correo de cambio a Current:", error);
+  }
+};
+
+const sendAccountStatusBlockedEmail = async (email, username) => {
+  try {
+    const mailOptions = {
+      from: '"Stingray"',
+      to: email,
+      subject: "Tu cuenta ha sido bloqueada - Stingray",
+      html: `
+        <p>¡Hola ${username}!</p>
+        <p>Tu cuenta en Stingray ha sido bloqueada por incumplir las normas de seguridad.</p>
+        <p>Evaluaremos la situación y si la resolución resulta favorable la desbloquearemos</p>
+        <p>Si crees que esto es un error o tienes alguna pregunta, no dudes en ponerte en contacto con nosotros.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error al enviar el correo de cuenta bloqueada:", error);
+  }
+};
+
+const sendAccountStatusActiveEmail = async (email, username) => {
+  try {
+    const mailOptions = {
+      from: '"Stingray"',
+      to: email,
+      subject: "Tu cuenta ha sido activada - Stingray",
+      html: `
+        <p>¡Hola ${username}!</p>
+        <p>Tu cuenta en Stingray ha sido activada.</p>
+        <p>¡Estamos encantados de que estés de vuelta! Si tienes alguna pregunta o inquietud, no dudes en ponerte en contacto con nosotros.</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error("Error al enviar el correo de cuenta activada:", error);
+  }
+};
+
 module.exports = {
   sendEmailConfirmation,
   sendEmailResetPassword,
@@ -311,4 +387,8 @@ module.exports = {
   sendEmailNewReservation,
   sendEmailReservationRejection,
   sendEmailReservationConfirmation,
+  sendChangeToAdminEmail,
+  sendChangeToCurrentEmail,
+  sendAccountStatusBlockedEmail,
+  sendAccountStatusActiveEmail,
 };

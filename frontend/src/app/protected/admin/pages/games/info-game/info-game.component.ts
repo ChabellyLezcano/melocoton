@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GameResponse } from '../../../interfaces/gameResponse';
+import { GameResponse } from '../../../interfaces/gameInterface';
 import { GameService } from '../../../services/games.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -12,6 +12,7 @@ export class InfoGameComponent implements OnInit {
   game: GameResponse | undefined;
   gameId: string;
   images: any[] = [];
+  tagsArray: string[] = [];
 
   constructor(
     private gameService: GameService,
@@ -26,6 +27,7 @@ export class InfoGameComponent implements OnInit {
     this.gameService.getGameById(this.gameId).subscribe(
       (response) => {
         this.game = response;
+        this.tagsArray = this.game.game.tags.map(tag => tag.trim());
       },
       (error) => {
         console.error('Error al obtener el juego:', error);
@@ -36,15 +38,12 @@ export class InfoGameComponent implements OnInit {
   onVerClick(gameId: string) {
     console.log('onVerClick llamado con gameId:', gameId);
     this.router.navigate(['/upload-game-photo', gameId]);
-
   }
 
   onEditClick(gameId: string) {
-    console.log('onVerClick llamado con gameId:', gameId);
+    console.log('onEditClick llamado con gameId:', gameId);
     this.router.navigate(['/edit-game', gameId]);
-
   }
-
 
   onDeleteClick(gameId: string) {
     // Mostrar una confirmación con SweetAlert2
@@ -64,7 +63,7 @@ export class InfoGameComponent implements OnInit {
           () => {
             // Mostrar un SweetAlert de éxito
             Swal.fire('Éxito', 'El juego ha sido eliminado con éxito', 'success');
-  
+
             // Redirigir al usuario al panel de administración
             this.router.navigate(['/dashboard-admin']);
           },
@@ -77,5 +76,22 @@ export class InfoGameComponent implements OnInit {
       }
     });
   }
-  
+
+  responsiveOptions = [
+    {
+      breakpoint: '1024px',
+      numVisible: 1,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 1,
+      numScroll: 1
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
 }

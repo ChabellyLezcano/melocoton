@@ -1,0 +1,60 @@
+<p-sidebar [(visible)]="sidebarVisible">
+    <ng-template pTemplate="header">
+      <div class="p-4 text-emerald-500 m-4">
+        <h3 class="text-2xl font-semibold">Stingray User</h3>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <ul class="space-y-8 p-5">
+            <li>
+              <a routerLink="/dashboard-admin" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-home text-xl"></i> <!-- Icono de gráfico de línea -->
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/foro" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-comments text-xl"></i> <!-- Icono de comentarios -->
+                <span>Foro</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/historial-pendientes" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-lg p-2 rounded text-lg">
+                <i class="pi pi-calendar text-xl"></i> <!-- Icono de calendario -->
+                <span>Historial Reservas</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/historial-general" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
+                <i class="pi pi-star text-xl"></i> <!-- Icono de estrella -->
+                <span>Favoritos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/recomendaciones" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
+                <i class="pi pi-thumbs-up text-xl"></i> <!-- Icono de pulgar arriba -->
+                <span>Recomendaciones</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/blog" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+                <i class="pi pi-pencil text-xl"></i> <!-- Icono de lápiz -->
+                <span>Blog</span>
+              </a>
+            </li>
+          </ul>       
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="p-4 text-center px-3">
+            <a (click)="logout()" class="cursor-pointer flex items-center justify-center space-x-2 text-red-500">
+              <span class="text-lg">Logout</span>
+              <i class="pi pi-sign-out text-xl text-red-500"></i>
+            </a>
+          </div>
+          
+      </ng-template>
+      
+  </p-sidebar>
+  
+  <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
+  

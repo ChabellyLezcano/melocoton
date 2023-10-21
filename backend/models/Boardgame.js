@@ -8,7 +8,7 @@ const boardGameSchema = new mongoose.Schema({
   rules: { type: String, default:""},
   status: {
     type: String,
-    enum: ["Disponible", "No disponible"],
+    enum: ["Disponible", "No Disponible"],
     default: "Disponible",
   },
   tags: [String],

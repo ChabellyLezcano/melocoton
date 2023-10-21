@@ -111,6 +111,14 @@ const loginUser = async (req, res) => {
       });
     }
 
+     // Check if the account is confirmed (authenticated is true)
+     if (!dbUser.accountStatus === "Blocked") {
+      return res.status(401).json({
+        ok: false,
+        msg: "Su usuario se encuentra bloqueado",
+      });
+    }
+
     // Confirm if the password matches
     const validPassword = bcrypt.compareSync(password, dbUser.password);
 

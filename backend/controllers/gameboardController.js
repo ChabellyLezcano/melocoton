@@ -140,12 +140,10 @@ const getBoardGames = async (req, res) => {
   try {
     const games = await BoardGame.find();
 
-    // Mezclar aleatoriamente la lista de juegos
-    const shuffledGames = shuffleArrayNoChangeOrden(games);
-
+    
     res.json({
       ok: true,
-      games: shuffledGames,
+      games: games,
     });
   } catch (error) {
     console.log(error);

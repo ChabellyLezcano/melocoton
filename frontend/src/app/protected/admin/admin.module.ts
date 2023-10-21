@@ -8,8 +8,10 @@ import { PrimeNgModule } from 'src/app/prime-ng/primen-ng.module';
 import { EditGameComponent } from './pages/games/edit-game/edit-game.component';
 import { InfoGameComponent } from './pages/games/info-game/info-game.component';
 import { AddGameComponent } from './pages/games/add-game/add-game.component';
-import { UploadPhotoGameComponent } from './pages/upload-photo-game/upload-photo-game.component';
+import { UploadPhotoGameComponent } from './pages/games/upload-photo-game/upload-photo-game.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AllReservetionsHistoryComponent } from './pages/history/all-reservetions-history/all-reservetions-history.component';
+import { ListUsersComponent } from './pages/list-users/list-users.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     EditGameComponent,
     InfoGameComponent,
     AddGameComponent,
-    UploadPhotoGameComponent
+    UploadPhotoGameComponent,
+    AllReservetionsHistoryComponent,
+    ListUsersComponent
   ],
   imports: [
     CommonModule,

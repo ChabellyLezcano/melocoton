@@ -13,8 +13,6 @@ const reservationSchema = new mongoose.Schema({
   },
   date: { type: Date, default: Date.now },
   expirationDate: Date,
-  deliveredDate: Date,
-  takenDate: Date,
   status: {
     type: String,
     enum: [
@@ -30,6 +28,7 @@ const reservationSchema = new mongoose.Schema({
 
   },
   rejectionReason: String,
+  endDate: Date,
   code: {
     type: String,
     unique: true, // Ensure that each game has a unique code

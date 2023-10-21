@@ -7,6 +7,9 @@ export interface AuthResponse {
     token?: string;
     msg?: string;
     photo?: string
+    users?: User[];
+    user?: User;
+
 }
 
 export interface User {
