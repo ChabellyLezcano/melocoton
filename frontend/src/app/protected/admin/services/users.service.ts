@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthResponse, User } from 'src/app/auth/interfaces/authInterface';
+import { UserResponse } from '../interfaces/userInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,48 +13,50 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  listUsers(): Observable<AuthResponse> {
+  listUsers(): Observable<UserResponse> {
     const url = `${this.baseUrl}/users/list-users`;
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
     });
 
-    return this.http.get<AuthResponse>(url, { headers });
+    return this.http.get<UserResponse>(url, { headers });
   }
 
-  changeToAdmin(userId: string): Observable<AuthResponse> {
+  changeToAdmin(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/users/change-to-admin/${userId}`;
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
     });
 
-    return this.http.post<AuthResponse>(url, { headers });
+    return this.http.post<UserResponse>(url, null, { headers });
   }
 
-  changeToCurrent(userId: string): Observable<any> {
+  changeToCurrent(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/users/change-to-current/${userId}`;
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
     });
 
-    return this.http.post(url, null, { headers });
+    return this.http.post<UserResponse>(url, null, { headers });
   }
 
-  changeAccountStatusToBlocked(userId: string): Observable<any> {
+  changeAccountStatusToBlocked(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/users/change-account-status-to-blocked/${userId}`;
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
     });
 
-    return this.http.post(url, null, { headers });
+    return this.http.post<UserResponse>(url, null, { headers });
   }
 
-  changeAccountStatusToActive(userId: string): Observable<any> {
+
+
+  changeAccountStatusToActive(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/users/change-account-status-to-active/${userId}`;
     const headers = new HttpHeaders({
       'token': localStorage.getItem('token') || ''
     });
 
-    return this.http.post(url, null, { headers });
+    return this.http.post<UserResponse>(url, null, { headers });
   }
 }

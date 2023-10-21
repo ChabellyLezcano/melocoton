@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/users.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-users',
@@ -16,60 +17,117 @@ export class ListUsersComponent implements OnInit {
 
   listUsers() {
     this.userService.listUsers().subscribe(
-      (data: any) => {
-        this.users = data.users;
+      (response: any) => {
+        this.users = response.users;
       },
       (error) => {
         console.error('Error al listar usuarios:', error);
       }
     );
   }
+ 
   changeToAdmin(userId: string) {
-    this.userService.changeToAdmin(userId).subscribe(
-      (data: any) => {
-        // Realiza alguna acción después de cambiar a Admin (si es necesario)
-        console.log('Rol cambiado a Admin:', data);
-      },
-      (error) => {
-        console.error('Error al cambiar el rol a Admin:', error);
+    Swal.fire({
+      title: 'Confirmar acción',
+      text: '¿Está seguro de cambiar el rol a Admin?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.changeToAdmin(userId).subscribe(
+          (response) => {
+            // Realiza alguna acción después de cambiar a Admin (si es necesario)
+            console.log('Rol cambiado a Admin:', response);
+            this.listUsers();
+            Swal.fire('Éxito', response.msg, 'success');
+          },
+          (error) => {
+            console.error('Error al cambiar el rol a Admin:', error);
+            Swal.fire('Error', 'Hubo un error al cambiar el rol a Admin', 'error');
+          }
+        );
       }
-    );
+    });
   }
+  
 
   changeToCurrent(userId: string) {
-    this.userService.changeToCurrent(userId).subscribe(
-      (data: any) => {
-        // Realiza alguna acción después de cambiar a Current (si es necesario)
-        console.log('Rol cambiado a Current:', data);
-      },
-      (error) => {
-        console.error('Error al cambiar el rol a Current:', error);
+    Swal.fire({
+      title: 'Confirmar acción',
+      text: '¿Está seguro de cambiar el rol a Current?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.changeToCurrent(userId).subscribe(
+          (response: any) => {
+            // Realiza alguna acción después de cambiar a Current (si es necesario)
+            console.log('Rol cambiado a Current:', response);
+            this.listUsers();
+            Swal.fire('Éxito', response.msg, 'success');
+          },
+          (error) => {
+            console.error('Error al cambiar el rol a Current:', error);
+            Swal.fire('Error', 'Hubo un error al cambiar el rol a Current', 'error');
+          }
+        );
       }
-    );
+    });
   }
-
+  
   changeAccountStatusToBlocked(userId: string) {
-    this.userService.changeAccountStatusToBlocked(userId).subscribe(
-      (data: any) => {
-        // Realiza alguna acción después de bloquear la cuenta (si es necesario)
-        console.log('Usuario bloqueado:', data);
-      },
-      (error) => {
-        console.error('Error al bloquear la cuenta:', error);
+    Swal.fire({
+      title: 'Confirmar acción',
+      text: '¿Está seguro de bloquear la cuenta?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, bloquear',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.changeAccountStatusToBlocked(userId).subscribe(
+          (response: any) => {
+            // Realiza alguna acción después de bloquear la cuenta (si es necesario)
+            console.log('Usuario bloqueado:', response);
+            this.listUsers();
+            Swal.fire('Éxito', response.msg, 'success');
+          },
+          (error) => {
+            console.error('Error al bloquear la cuenta:', error);
+            Swal.fire('Error', 'Hubo un error al bloquear la cuenta', 'error');
+          }
+        );
       }
-    );
+    });
   }
-
+  
   changeAccountStatusToActive(userId: string) {
-    this.userService.changeAccountStatusToActive(userId).subscribe(
-      (data: any) => {
-        // Realiza alguna acción después de desbloquear la cuenta (si es necesario)
-        console.log('Usuario desbloqueado:', data);
-      },
-      (error) => {
-        console.error('Error al desbloquear la cuenta:', error);
+    Swal.fire({
+      title: 'Confirmar acción',
+      text: '¿Está seguro de desbloquear la cuenta?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, desbloquear',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.changeAccountStatusToActive(userId).subscribe(
+          (response: any) => {
+            // Realiza alguna acción después de desbloquear la cuenta (si es necesario)
+            console.log('Usuario desbloqueado:', response);
+            this.listUsers();
+            Swal.fire('Éxito', response.msg, 'success');
+          },
+          (error) => {
+            console.error('Error al desbloquear la cuenta:', error);
+            Swal.fire('Error', 'Hubo un error al desbloquear la cuenta', 'error');
+          }
+        );
       }
-    );
+    });
   }
-
 }
