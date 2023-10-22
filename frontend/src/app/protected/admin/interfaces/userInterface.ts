@@ -6,14 +6,14 @@ export interface UserResponse {
 }
 
 export interface User {
-    accountStatus: string;
-    _id:           string;
-    username:      string;
-    email:         string;
-    password:      string;
-    role:          string;
-    token:         null | string;
-    authenticated: boolean;
-    __v:           number;
+    accountStatus?: string;
+    _id?:           string;
+    username?:      string;
+    email?:         string;
+    password?:      string;
+    role?:          string;
+    token?:         null | string;
+    authenticated?: boolean;
+    __v?:           number;
     photo?:        string;
 }

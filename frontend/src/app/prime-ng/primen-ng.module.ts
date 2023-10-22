@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import {CarouselModule} from 'primeng/carousel';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [],
@@ -23,7 +24,8 @@ import {CarouselModule} from 'primeng/carousel';
     ReactiveFormsModule,
     DialogModule,
     PaginatorModule,
-    CarouselModule
+    CarouselModule,
+    DropdownModule
   ]
 })
 export class PrimeNgModule { }

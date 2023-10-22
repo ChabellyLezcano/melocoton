@@ -7,3 +7,16 @@
 @tailwind components;
 @tailwind utilities;
 
+.scroll-container {
+  
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.message-list {
+  
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+  

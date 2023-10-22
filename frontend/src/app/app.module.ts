@@ -7,9 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
-import { UserModule } from './protected/user/user.module';
-import { SharedModule } from 'primeng/api';
+import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './protected/admin/admin.module';
+import { UserModule } from './protected/user/user.module';
 
 
 @NgModule({
@@ -21,8 +21,8 @@ import { AdminModule } from './protected/admin/admin.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    SharedModule,
     AuthModule,
+    SharedModule,
     AdminModule,
     UserModule
   ],

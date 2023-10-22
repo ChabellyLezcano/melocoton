@@ -88,7 +88,6 @@ const createUser = async (req, res) => {
   }
 };
 
-
 // Iniciar sesión
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -159,7 +158,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-
 // Confirmar cuenta
 const confirmAccount = async (req, res) => {
   const { token } = req.params; // Capturar el token de la url o header
@@ -201,7 +199,6 @@ const confirmAccount = async (req, res) => {
     });
   }
 };
-
 
 //Olvidé contraseña
 const forgotPassword = async (req, res) => {
@@ -248,7 +245,6 @@ const forgotPassword = async (req, res) => {
       .json({ error: "Ha ocurrido un error al procesar la solicitud." });
   }
 };
-
 
 // Restablecer contraseña
 const newPassword = async (req, res) => {
@@ -307,7 +303,6 @@ const newPassword = async (req, res) => {
     });
   }
 };
-
 
 // Verificar token
 const checkToken = async (req, res) => {
@@ -394,6 +389,32 @@ const userIsAdmin = async (req, res) => {
   }
 };
 
+const userInfo = async (req, res) => {
+  const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        ok: false,
+        msg: "El usuario no existe"
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      msg: 'Info del usuario obtenida',
+      user
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Error en el servidor"
+    });
+  }
+};
+
 
 module.exports = {
   createUser,
@@ -403,5 +424,6 @@ module.exports = {
   checkToken,
   newPassword,
   revalidateToken,
-  userIsAdmin
+  userIsAdmin,
+  userInfo
 };

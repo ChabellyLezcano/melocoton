@@ -7,6 +7,7 @@ import { UploadPhotoGameComponent } from './pages/games/upload-photo-game/upload
 import { EditGameComponent } from './pages/games/edit-game/edit-game.component';
 import { AllReservetionsHistoryComponent } from './pages/history/all-reservetions-history/all-reservetions-history.component';
 import { ListUsersComponent } from './pages/list-users/list-users.component';
+import { ForumComponent } from './pages/forum/forum.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
       { path: 'upload-game-photo/:id', component:UploadPhotoGameComponent },
       { path: 'edit-game/:id', component:EditGameComponent },
       { path: 'all-reservations-admin', component:AllReservetionsHistoryComponent },
-      { path: 'list-users', component:ListUsersComponent }
+      { path: 'list-users', component:ListUsersComponent },
+      { path: 'forum', component:ForumComponent }
     ],
   }
 ];

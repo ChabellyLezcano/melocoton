@@ -5,22 +5,24 @@ import { AuthServiceTsService } from 'src/app/auth/service/auth.service';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
-  user: User | undefined;
+  user: any | undefined;
   isAdmin: boolean = false;
 
-  constructor(private authService: AuthServiceTsService,
-    private router: Router) {}
+  constructor(private authService: AuthServiceTsService, private router: Router) {}
 
   ngOnInit() {
-    this.user = this.authService.user;
-    if (this.user && this.user.role === 'Admin') {
-      this.isAdmin = true;
-    }
-
-    
+    this.authService.getUserInfo().subscribe((response) => {
+      if (response) {
+        this.user = response.user;
+        console.log(response)
+        if (response.user.role === 'Admin') {
+          this.isAdmin = true;
+        }
+      }
+    });
   }
 
   redirectToDashboard() {
@@ -30,5 +32,4 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['/dashboard-user']);
     }
   }
-  
 }

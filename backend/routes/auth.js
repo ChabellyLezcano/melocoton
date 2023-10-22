@@ -9,6 +9,7 @@ const {
   newPassword,
   revalidateToken,
   userIsAdmin,
+  userInfo,
 } = require("../controllers/authController");
 
 const { validateFields } = require("../middlewares/validate-fields");
@@ -65,6 +66,9 @@ router.get("/check-token/:token", checkToken);
 router.get("/renew", validateJWT, revalidateToken);
 
 router.get('/user-is-admin', validateJWT, userIsAdmin);
+
+
+router.get('/user-info', validateJWT, userInfo);
 
 
 module.exports = router;

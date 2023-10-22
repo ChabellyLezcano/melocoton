@@ -15,7 +15,9 @@ const createMessage = async (req, res) => {
     const savedMessage = await newMessage.save();
     // Emitir el nuevo mensaje a todos los clientes conectados
     req.io.emit("newMessage", savedMessage);
-    return res.status(201).json(savedMessage);
+    return res
+      .status(201)
+      .json({ ok: true, msg: "Mensaje enviado", savedMessage });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Error enviando el mensaje" });
@@ -25,8 +27,18 @@ const createMessage = async (req, res) => {
 // Obtener listado de mensajes
 const getAllMessages = async (req, res) => {
   try {
-    const messages = await Message.find().sort({ date: -1 }).exec();
-    return res.status(200).json(messages);
+    const messages = await Message.find()
+      .sort({ date: -1 })
+      .populate({
+        path: "user",
+        select: "username photo role", // Ajusta los campos que deseas mostrar del usuario
+      })
+      .exec();
+
+
+    return res
+      .status(200)
+      .json({ ok: true, msg: "Lista de mensajes", messages });
   } catch (error) {
     return res.status(500).json({ error: "Error al capturar los mensajes" });
   }
@@ -54,7 +66,7 @@ const deleteMessage = async (req, res) => {
     await Message.findByIdAndRemove(messageId).exec();
     // Emitir un evento para borrar el mensaje a todos los clientes conectados
     req.io.emit("deleteMessage", messageId);
-    return res.status(204).send();
+    return res.json({ ok: true, msg: "Mensaje eliminado correctamente" });
   } catch (error) {
     return res.status(500).json({ error: "Error borrando el mensaje" });
   }
@@ -91,7 +103,11 @@ const editMessage = async (req, res) => {
     // Emitir un evento para informar a los clientes sobre la edición del mensaje
     req.io.emit("editMessage", updatedMessage);
 
-    return res.status(200).json(updatedMessage);
+    return res.json({
+      ok: true,
+      msg: "Mensaje editado correctamente",
+      updatedMessage,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Error editando el mensaje" });

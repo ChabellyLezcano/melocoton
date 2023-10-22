@@ -12,6 +12,7 @@ import { UploadPhotoGameComponent } from './pages/games/upload-photo-game/upload
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AllReservetionsHistoryComponent } from './pages/history/all-reservetions-history/all-reservetions-history.component';
 import { ListUsersComponent } from './pages/list-users/list-users.component';
+import { ForumComponent } from './pages/forum/forum.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ListUsersComponent } from './pages/list-users/list-users.component';
     AddGameComponent,
     UploadPhotoGameComponent,
     AllReservetionsHistoryComponent,
-    ListUsersComponent
+    ListUsersComponent,
+    ForumComponent
   ],
   imports: [
     CommonModule,

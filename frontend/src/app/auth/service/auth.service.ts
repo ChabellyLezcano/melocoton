@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { AuthResponse, User } from '../interfaces/authInterface';
 import { Router } from '@angular/router';
+import { UserResponse } from 'src/app/protected/admin/interfaces/userInterface';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,11 @@ export class AuthServiceTsService {
     );
   }
 
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token; // Devuelve true si hay un token en el LocalStorage
+  }
+
   login(email: string, password: string) {
     const url = `${this.baseUrl}/auth`;
     const body = { email, password };
@@ -66,6 +72,8 @@ export class AuthServiceTsService {
             role: resp.role!,
             photo: resp.photo!
           };
+
+          localStorage.setItem("user", this._user._id)
 
           if (this._user.role === 'Admin') {
             this.router.navigate(['/dashboard-admin']);
@@ -158,6 +166,17 @@ export class AuthServiceTsService {
     );
   }
 
+  getUserInfo(): Observable<UserResponse> {
+    const url = `${this.baseUrl}/auth/user-info`; // Ajusta la ruta al endpoint correspondiente en tu backend
+
+    const headers = new HttpHeaders().set(
+      'token',
+      localStorage.getItem('token') || ''
+    );
+
+    return this.http.get<UserResponse>(url, { headers })
+  }
+  
   logout() {
     localStorage.clear();
   }
