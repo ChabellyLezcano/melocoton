@@ -15,7 +15,7 @@
 
         <!-- Mensajes (derecha) -->
         <div class="w-full ml-4 relative">
-          <div [ngClass]="{'bg-blue-500 text-white': message.user._id === user, 'bg-gray-200 text-black': message.user._id !== user}" class="message-text pb-4 pt-2 pr-4 pl-4 border rounded-xl">
+          <div [ngClass]="{'bg-blue-500 text-white': message.user._id === userId, 'bg-gray-200 text-black': message.user._id !== userId}" class="message-text pb-4 pt-2 pr-4 pl-4 border rounded-xl">
             <div class="message-header" style="display: flex; justify-content: space-between; align-items: center;">
               <span class="message-username text-md font-semibold">
                 {{ message.user.username }}
@@ -23,14 +23,14 @@
                 <i *ngIf="message.user.role === 'Admin'" class="pi pi-star-fill text-yellow-500 ml-2"></i>
               </span>
               <!-- Clase condicional para el color del icono -->
-              <i (click)="toggleMessageState(message._id)" [ngClass]="{'text-white': message.user._id === user, 'text-slate-500 hover:text-slate-900': message.user._id !== user}" class="pi pi-ellipsis-h p-2" style="margin-left: 10px;"></i>
+              <i (click)="toggleMessageState(message._id)" [ngClass]="{'text-white': message.user._id === userId, 'text-slate-500 hover:text-slate-900': message.user._id !== userId}" class="pi pi-ellipsis-h p-2" style="margin-left: 10px;"></i>
             </div>
             {{ message.text }}
             <!-- Muestra la fecha junto a la hora con estilos de Tailwind CSS -->
             <div class="message-time text-xs pt-6 absolute bottom-0 right-0 mt-5 pr-2 pb-1">
               <!-- Clase condicional para el color del texto -->
-              <span [ngClass]="{'text-white': message.user._id === user, 'text-gray-900': message.user._id !== user}" class="italic px-3">{{ message.date | date:'dd/MM/yyyy' }}</span>
-              <span [ngClass]="{'text-white': message.user._id === user, 'text-gray-900': message.user._id !== user}">{{ message.date | date:'HH:mm' }}</span>
+              <span [ngClass]="{'text-white': message.user._id === userId, 'text-gray-900': message.user._id !== userId}" class="italic px-3">{{ message.date | date:'dd/MM/yyyy' }}</span>
+              <span [ngClass]="{'text-white': message.user._id === userId, 'text-gray-900': message.user._id !== userId}">{{ message.date | date:'HH:mm' }}</span>
             </div>
           </div>
 

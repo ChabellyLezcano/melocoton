@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { AuthResponse, User } from '../interfaces/authInterface';
 import { Router } from '@angular/router';
 import { UserResponse } from 'src/app/protected/admin/interfaces/userInterface';
+import { UserDataService } from './user-data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +27,16 @@ export class AuthServiceTsService {
     return { ...this._user };
   }
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private userDataService: UserDataService) {
+    this.userDataService.userData$.subscribe((user) => {
+      if (user) {
+        this._user = user;
+      }
+    });
+  }
 
   private baseUrl: string = environment.baseUrl;
+
 
   registro(
     username: string,
@@ -64,8 +72,8 @@ export class AuthServiceTsService {
       tap((resp) => {
         if (resp.ok === true) {
           localStorage.setItem('token', resp.token!);
+
           this._user = {
-            ...this._user,
             email: resp.email!,
             username: resp.username!,
             _id: resp._id!,
@@ -73,7 +81,9 @@ export class AuthServiceTsService {
             photo: resp.photo!
           };
 
-          localStorage.setItem("user", this._user._id)
+
+          this.userDataService.updateUserData(this._user);
+
 
           if (this._user.role === 'Admin') {
             this.router.navigate(['/dashboard-admin']);
@@ -87,6 +97,7 @@ export class AuthServiceTsService {
       catchError((err) => of(err.error.msg))
     );
   }
+
 
   validateToken(): Observable<boolean> {
     const url = `${this.baseUrl}/auth/renew`;
@@ -151,33 +162,17 @@ export class AuthServiceTsService {
       )
     );
   }
-
-  isUserAdmin(): Observable<boolean> {
-    const url = `${this.baseUrl}/auth/user-is-admin`; // Ajusta la ruta al endpoint correspondiente en tu backend
-
-    const headers = new HttpHeaders().set(
-      'token',
-      localStorage.getItem('token') || ''
-    );
-
-    return this.http.get<AuthResponse>(url, { headers }).pipe(
-      map((resp) => resp.ok),
-      catchError((err) => of(false))
-    );
-  }
-
-  getUserInfo(): Observable<UserResponse> {
-    const url = `${this.baseUrl}/auth/user-info`; // Ajusta la ruta al endpoint correspondiente en tu backend
-
-    const headers = new HttpHeaders().set(
-      'token',
-      localStorage.getItem('token') || ''
-    );
-
-    return this.http.get<UserResponse>(url, { headers })
-  }
   
   logout() {
-    localStorage.clear();
+    // Borra el token y la información del usuario del almacenamiento local
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    console.log("Cierre de sesión")
+    // Elimina el userData del servicio UserDataService
+    this.userDataService.updateUserData(null);
+    // Realiza cualquier otra lógica de cierre de sesión necesaria
+    // (por ejemplo, redirigir al usuario a la página de inicio de sesión)
+    this.router.navigate(['/login']);
   }
+  
 }

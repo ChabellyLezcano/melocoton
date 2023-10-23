@@ -6,6 +6,7 @@ import { AuthServiceTsService } from 'src/app/auth/service/auth.service';
 import { GameService } from '../../services/games.service';
 import { Game } from '../../interfaces/gameInterface';
 import Swal from 'sweetalert2';
+import { UserDataService } from 'src/app/auth/service/user-data.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -22,8 +23,11 @@ export class DashboardAdminComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private gameService: GameService,
-    private authService: AuthServiceTsService
-  ) {}
+    private authService: AuthServiceTsService,
+    private userDataService: UserDataService
+  ) {
+    
+  }
 
   ngOnInit() {
     this.user = this.authService.user;

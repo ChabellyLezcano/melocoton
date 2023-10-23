@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthServiceTsService } from '../../service/auth.service';
 import Swal from 'sweetalert2';
 import { User } from '../../interfaces/authInterface';
+import { UserDataService } from '../../service/user-data.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
 
   private _user: User | null = null; // Define la propiedad _usuario
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthServiceTsService) { }
+  constructor(private fb: FormBuilder, private userDataService: UserDataService, private router: Router, private authService: AuthServiceTsService) { }
 
 
   login() {
@@ -27,9 +28,10 @@ export class LoginComponent {
     this.authService.login(email, password).subscribe(
       (ok) => {
         if (ok === true) {
+        
           console.log(ok);
         } else {
-          Swal.fire('Error', ok, 'error');
+          Swal.fire('Error', "Error", 'error');
         }
       }
     );

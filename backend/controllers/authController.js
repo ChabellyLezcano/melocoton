@@ -9,7 +9,6 @@ const {
 const generateID = require("../helpers/generateId");
 const { randomImage } = require("../helpers/randomImage");
 
-
 // Registro
 const createUser = async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -38,7 +37,7 @@ const createUser = async (req, res) => {
     const image = randomImage();
 
     // New user model
-    const dbUser = new User({
+    const newUser = new User({
       photo: image,
       username,
       email,
@@ -49,32 +48,27 @@ const createUser = async (req, res) => {
 
     // Hash password
     const salt = bcrypt.genSaltSync();
-    dbUser.password = bcrypt.hashSync(password, salt);
-
-    // Save user in db
-    await dbUser.save();
+    newUser.password = bcrypt.hashSync(password, salt);
 
     // Generate
     const token = await generateID();
 
     // Update user token
-    dbUser.token = token;
-
-    
+    newUser.token = token;
 
     // Save user
-    await dbUser.save();
+    await newUser.save();
 
     // Send confirmation account mail
-    sendEmailConfirmation(dbUser.email, dbUser.token);
+    sendEmailConfirmation(newUser.email, newUser.token);
 
     // Response with data info
-    res.json({
+    res.status(200).json({
       ok: true,
-      _id: dbUser.id,
+      _id: newUser._id,
       photo: image,
-      email: dbUser.email,
-      authenticated: dbUser.authenticated,
+      email: newUser.email,
+      authenticated: newUser.authenticated,
       token,
       role,
       msg: "El correo de confirmación de cuenta ha sido enviado. Revise su correo electrónico",
@@ -93,9 +87,9 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const dbUser = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email });
 
-    if (!dbUser) {
+    if (!user) {
       return res.status(400).json({
         ok: false,
         msg: "El email no existe",
@@ -103,15 +97,15 @@ const loginUser = async (req, res) => {
     }
 
     // Check if the account is confirmed (authenticated is true)
-    if (!dbUser.authenticated) {
+    if (!user.authenticated) {
       return res.status(401).json({
         ok: false,
         msg: "La cuenta no ha sido confirmada. Por favor, verifique su correo electrónico",
       });
     }
 
-     // Check if the account is confirmed (authenticated is true)
-     if (!dbUser.accountStatus === "Blocked") {
+    // Check if the account is confirmed (authenticated is true)
+    if (!user.accountStatus === "Blocked") {
       return res.status(401).json({
         ok: false,
         msg: "Su usuario se encuentra bloqueado",
@@ -119,7 +113,7 @@ const loginUser = async (req, res) => {
     }
 
     // Confirm if the password matches
-    const validPassword = bcrypt.compareSync(password, dbUser.password);
+    const validPassword = bcrypt.compareSync(password, user.password);
 
     if (!validPassword) {
       return res.status(401).json({
@@ -129,23 +123,23 @@ const loginUser = async (req, res) => {
     }
 
     // Generate the JWT
-    const token = await generateJWT(dbUser.id);
+    const token = await generateJWT(user.id);
 
     // Update the token in the user
-    dbUser.token = token;
+    user.token = token;
 
     // Save the user with the updated token
-    await dbUser.save();
+    await user.save();
 
     // Service response
-    return res.json({
+    return res.status(200).json({
       ok: true,
-      msg: "Inició de sesión correcto",
-      _id: dbUser.id,
-      email: dbUser.email,
-      role: dbUser.role,
-      username: dbUser.username,
-      photo: dbUser.photo,
+      msg: "Inicio de sesión correcto",
+      _id: user.id,
+      email: user.email,
+      role: user.role,
+      username: user.username,
+      photo: user.photo,
       token,
     });
   } catch (error) {
@@ -191,8 +185,6 @@ const confirmAccount = async (req, res) => {
       msg: "Cuenta confirmada exitosamente",
     });
   } catch (error) {
-    console.log(error);
-
     return res.status(500).json({
       ok: false,
       msg: "Error al confirmar la cuenta. Contacte con el administrador",
@@ -206,17 +198,17 @@ const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     // Buscar si existe un usuario con el email proporcionado
-    const dbUser = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    if (!dbUser) {
+    if (!user) {
       return res.status(400).json({
         ok: false,
-        msg: "El user no existe con ese correo electrónico",
+        msg: "El usuario no existe con ese correo electrónico",
       });
     }
 
     // Comprobar si la contraseña ha sido utilizada anteriormente
-    if (newPassword === dbUser.password) {
+    if (newPassword === user.password) {
       return res.status(400).json({
         ok: false,
         msg: "La nueva contraseña no puede ser igual a una contraseña ya utilizada anteriormente",
@@ -227,8 +219,8 @@ const forgotPassword = async (req, res) => {
     const token = generateID();
 
     // Guardar el token en la db
-    dbUser.token = token;
-    await dbUser.save();
+    user.token = token;
+    await user.save();
 
     // Enviar email para establecer contraeña
     await sendEmailResetPassword(email, token);
@@ -237,9 +229,9 @@ const forgotPassword = async (req, res) => {
     res.status(200).json({
       msg: "Se ha enviado un correo electrónico para restablecer la contraseña.",
       ok: true,
+      token,
     });
   } catch (error) {
-    console.error("Error en el controlador de forgotPassword:", error);
     res
       .status(500)
       .json({ error: "Ha ocurrido un error al procesar la solicitud." });
@@ -314,7 +306,7 @@ const checkToken = async (req, res) => {
 
     if (user) {
       // Aquí puedes devolver la información del user
-      return res.json({
+      return res.status(200).json({
         ok: true,
         user,
         msg: "Token confirmado",
@@ -336,25 +328,39 @@ const checkToken = async (req, res) => {
 };
 
 const revalidateToken = async (req, res) => {
-  const userId  = req.id;
+  try {
+    const userId = req.id;
 
-  // Generar el JWT
-  const token = await generateJWT(userId);
+    // Generar el JWT
+    const token = await generateJWT(userId);
 
-  const user = await User.findById(userId)
+    const user = await User.findById(userId);
 
-  return res.json({
-    ok: true,
-    _id: userId,
-    token,
-    role: user.role,
-    email: user.email,
-    username: user.username,
-    photo: user.photo,
-    msg: 'Sesión renovada',
-  });
+    const response = {
+      ok: true,
+      _id: userId,
+      token,
+      role: user.role,
+      email: user.email,
+      username: user.username,
+      photo: user.photo,
+      msg: "Sesión renovada",
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+
+    const errorResponse = {
+      ok: false,
+      msg: "Error al renovar la sesión. Contacte con el administrador",
+    };
+
+    return res.status(500).json(errorResponse);
+  }
 };
 
+// Comprobar si un usuario es admin
 const userIsAdmin = async (req, res) => {
   const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
   try {
@@ -363,32 +369,33 @@ const userIsAdmin = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         ok: false,
-        msg: "El usuario no existe"
+        msg: "El usuario no existe",
       });
     }
 
-    if (user.role === 'admin') {
+    if (user.role === "Admin") {
       // El usuario es un administrador
       return res.status(200).json({
         ok: true,
-        msg: 'Eres un administrador. Acceso permitido.'
+        msg: "Eres un administrador. Acceso permitido.",
       });
     } else {
       // El usuario no es un administrador
       return res.status(403).json({
         ok: false,
-        msg: 'No eres un administrador. Acceso denegado.'
+        msg: "No eres un administrador. Acceso denegado.",
       });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       ok: false,
-      msg: "Error en el servidor"
+      msg: "Error en el servidor",
     });
   }
 };
 
+// Obtener información del usuario
 const userInfo = async (req, res) => {
   const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
   try {
@@ -397,24 +404,23 @@ const userInfo = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         ok: false,
-        msg: "El usuario no existe"
+        msg: "El usuario no existe",
       });
     }
 
     return res.status(200).json({
       ok: true,
-      msg: 'Info del usuario obtenida',
-      user
+      msg: "Info del usuario obtenida",
+      user,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       ok: false,
-      msg: "Error en el servidor"
+      msg: "Error en el servidor",
     });
   }
 };
-
 
 module.exports = {
   createUser,
@@ -425,5 +431,5 @@ module.exports = {
   newPassword,
   revalidateToken,
   userIsAdmin,
-  userInfo
+  userInfo,
 };

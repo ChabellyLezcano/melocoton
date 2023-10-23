@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 import { MessageResponse, Message } from '../../interfaces/messageInterface';
 import Swal from 'sweetalert2';
+import { UserDataService } from 'src/app/auth/service/user-data.service';
 
 @Component({
   selector: 'app-forum',
@@ -9,7 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class ForumComponent implements OnInit {
   @ViewChild('messageContainer') messageContainer: ElementRef;
-  user = localStorage.getItem('user');
+  userId! : string;
   newMessageText: string = '';
   messages: Message[] = [];
   editedMessageText: string = '';
@@ -17,6 +18,7 @@ export class ForumComponent implements OnInit {
   messageStates: { [key: string]: boolean } = {}; // Objeto para rastrear el estado de cada mensaje
   currentDate: string | null = null;
   isDialogOpen = false;
+  isAdmin = false;
   // Dentro de tu componente ForumComponent
   messageIdBeingEdited: string = ''; // Declaración de la propiedad
 
@@ -49,8 +51,17 @@ export class ForumComponent implements OnInit {
     this.isDialogOpen = false;
   }
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private userDataService: UserDataService) {
     this.messageContainer = new ElementRef(null);
+    this.userDataService.userData$.subscribe((user) => {
+      if (user) {
+        this.userId = user._id;
+        console.log("Header" + user.username)
+        if (user.role === 'Admin') {
+          this.isAdmin = true;
+        }
+      }
+    });
   }
 
   toggleMessageState(messageId: string) {

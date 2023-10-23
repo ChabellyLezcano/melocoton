@@ -10,23 +10,39 @@
         <app-sidebar-user></app-sidebar-user>
       </ng-template>
     </div>
-    
+
     <!-- Logo en el centro -->
-    <div class="text-center" (click)="redirectToDashboard()" style="cursor: pointer;">
-      <img src="../../../../assets/icono.ico" alt="Logo" class="h-20 w-42 inline mr-2">
+    <div
+      class="text-center"
+      (click)="redirectToDashboard()"
+      style="cursor: pointer"
+    >
+      <img
+        src="../../../../assets/icono.ico"
+        alt="Logo"
+        class="h-20 w-42 inline mr-2"
+      />
     </div>
-    
+
     <!-- Elementos a la derecha -->
     <div class="flex items-center justify-end space-x-4">
       <!-- Ícono de estrella (con color azul) y mensaje de título -->
-      <i class="pi pi-star-fill text-xl text-yellow-500 cursor-pointer" title="Usuario administrador" *ngIf="isAdmin"></i>
-      
+      <i
+        class="pi pi-star-fill text -xl text-yellow-500 cursor-pointer"
+        title="Usuario administrador"
+        *ngIf="isAdmin"
+      ></i>
+
       <!-- Nombre de usuario -->
       <span class="hidden sm:inline" *ngIf="user">{{ user.username }}</span>
 
       <!-- Foto de perfil del usuario -->
-      <img [src]="user?.photo" alt="Foto de perfil" class="h-11 w-13 rounded-full">
-      
+      <img
+        [src]="user?.photo"
+        alt="Foto de perfil"
+        class="h-11 w-13 rounded-full"
+      />
+
       <!-- Ícono de engranaje de PrimeNG -->
       <i class="pi pi-cog text-xl cursor-pointer"></i>
     </div>

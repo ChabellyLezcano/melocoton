@@ -42,7 +42,7 @@ const createBoardGame = async (req, res) => {
       status,
       objective,
       rules,
-      tags,
+      tags: tags.split(',').map(tag => tag.trim()),
       code, // Add the generated code to the game
     });
 
@@ -96,6 +96,7 @@ const deleteBoardGame = async (req, res) => {
   }
 };
 
+
 // Editar juego de mesa
 const editBoardGame = async (req, res) => {
   const { id } = req.params;
@@ -114,9 +115,15 @@ const editBoardGame = async (req, res) => {
     // Actualizamos los campos del juego de mesa
     const gameData = req.body;
 
-    game.set(gameData);
+    // Verificamos si 'tags' está presente y es una cadena
+    if (typeof gameData.tags === 'string') {
+      gameData.tags = gameData.tags.split(',').map(tag => tag.trim());
+    }
 
-    console.log(gameData)
+    // Elimina el campo 'code' para evitar cambios accidentales en el código
+    delete gameData.code;
+
+    game.set(gameData);
 
     // Guardamos el juego de mesa actualizado en la base de datos
     await game.save();
@@ -134,6 +141,8 @@ const editBoardGame = async (req, res) => {
     });
   }
 };
+
+
 
 // Listar juegos de mesa disponibles
 const getBoardGames = async (req, res) => {
