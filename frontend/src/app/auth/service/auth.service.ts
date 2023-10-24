@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { AuthResponse, User } from '../interfaces/authInterface';
 import { Router } from '@angular/router';
-import { UserResponse } from 'src/app/protected/admin/interfaces/userInterface';
+import { UserResponse } from 'src/app/protected/interfaces/userInterface';
 import { UserDataService } from './user-data.service';
 
 @Injectable({
@@ -83,13 +83,6 @@ export class AuthServiceTsService {
 
 
           this.userDataService.updateUserData(this._user);
-
-
-          if (this._user.role === 'Admin') {
-            this.router.navigate(['/dashboard-admin']);
-          } else {
-            this.router.navigate(['/dashboard-user']);
-          }
         }
       }),
 

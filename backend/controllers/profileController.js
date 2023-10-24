@@ -1,6 +1,5 @@
 const { User } = require("../models/User");
 
-
 // Obtner la información del perfil del usuario
 const getUserInfo = async (req, res) => {
   try {
@@ -11,7 +10,7 @@ const getUserInfo = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
     }
 
     // Filtrar la información que el usuario puede ver
@@ -22,15 +21,14 @@ const getUserInfo = async (req, res) => {
       photo: user.photo, // También puedes incluir la foto si lo deseas
     };
 
-    res.json(userInfo);
+    res.json({ ok: true, userInfo });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ message: "Error al obtener la información del usuario" });
+      .json({ ok: false, msg: "Error al obtener la información del usuario" });
   }
 };
-
 
 // Actualizar foto de perfil
 const updatePhoto = async (req, res) => {
@@ -45,7 +43,7 @@ const updatePhoto = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
     }
 
     // Actualizar la foto de perfil si se proporcionó
@@ -57,15 +55,17 @@ const updatePhoto = async (req, res) => {
     await user.save();
 
     // Responder con un mensaje de éxito
-    res.json({ message: "Foto de perfil actualizada con éxito" });
+    res.json({ ok: true, msg: "Foto de perfil actualizada con éxito" });
   } catch (error) {
     console.error(error);
     res
       .status(500)
-      .json({ message: "Error al actualizar la foto de perfil del usuario" });
+      .json({
+        ok: false,
+        msg: "Error al actualizar la foto de perfil del usuario",
+      });
   }
 };
-
 
 // Actualizar nombre de usuario
 const updateUsername = async (req, res) => {
@@ -80,7 +80,7 @@ const updateUsername = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
     }
 
     // Verificar si el usuario está intentando cambiar a un nombre de usuario que ya existe
@@ -88,7 +88,7 @@ const updateUsername = async (req, res) => {
     if (existingUser && existingUser._id.toString() !== userId) {
       return res
         .status(400)
-        .json({ message: "El nombre de usuario ya está en uso" });
+        .json({ ok: false, msg: "El nombre de usuario ya está en uso" });
     }
 
     // Actualizar el nombre de usuario si se proporcionó
@@ -100,17 +100,15 @@ const updateUsername = async (req, res) => {
     await user.save();
 
     // Responder con un mensaje de éxito
-    res.json({ message: "Nombre de usuario actualizado con éxito" });
+    res.json({ ok: true, msg: "Nombre de usuario actualizado con éxito" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Error al actualizar el nombre de usuario del usuario",
-      });
+    res.status(500).json({
+      ok: false,
+      msg: "Error al actualizar el nombre de usuario del usuario",
+    });
   }
 };
-
 
 module.exports = {
   getUserInfo,

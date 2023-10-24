@@ -1,0 +1,54 @@
+<app-header></app-header>
+<div class="p-4">
+    <h1 class="text-2xl mb-4">Lista de Usuarios</h1>
+    <p-table [value]="users">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Avatar</th>
+          <th>Nombre de Usuario</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado de Cuenta</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <div class="flex items-center">
+              <div class="rounded-full overflow-hidden h-10 w-10 mr-2">
+                <img [src]="user.photo || '../../../../../assets/profile.png'" alt="Avatar" class="object-cover h-full w-full">
+              </div>
+            </div>
+          </td>
+          <td>
+            <span>
+              {{ user.username }}
+              <i *ngIf="user.role === 'Admin'" class="pi pi-star-fill text-yellow-500 ml-2"></i>
+            </span>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span [ngClass]="{'text-blue-500': user.role === 'Current', 'text-yellow-500': user.role === 'Admin'}">
+              {{ user.role }}
+            </span>
+          </td>
+          <td>
+            <span [ngClass]="{'text-red-500': user.accountStatus === 'Bloqueado', 'text-green-500': user.accountStatus === 'Activo'}">
+              {{ user.accountStatus }}
+            </span>
+          </td>
+          <td>
+            <button *ngIf="user.role === 'Current'" class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded" (click)="changeToAdmin(user._id)">Admin</button>
+            <button *ngIf="user.role === 'Admin'" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded" (click)="changeToCurrent(user._id)">Current</button>
+            <button *ngIf="user.accountStatus === 'Bloqueado'" class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded" (click)="changeAccountStatusToActive(user._id)">Desbloquear</button>
+            <button *ngIf="user.accountStatus === 'Activo'" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" (click)="changeAccountStatusToBlocked(user._id)">Bloquear</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <!-- Paginación -->
+    <p-paginator [rows]="10" [totalRecords]="users.length" [rowsPerPageOptions]="[10, 20, 50]"></p-paginator>
+  </div>
+  

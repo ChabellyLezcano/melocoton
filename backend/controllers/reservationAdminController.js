@@ -21,7 +21,7 @@ const getAdminReservationHistory = async (req, res) => {
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Only administrators are allowed to access reservation history",
+        msg: "Solo los administradores tienen acceso al historial de reservas",
       });
     }
 
@@ -31,10 +31,10 @@ const getAdminReservationHistory = async (req, res) => {
     // Actualizar el estado de las reservas vencidas
     for (const reservation of reservations) {
       if (
-        reservation.status === "Accepted" &&
+        reservation.status === "Aceptada" &&
         reservation.expirationDate < new Date()
       ) {
-        reservation.status = "Expired";
+        reservation.status = "Expirada";
         await reservation.save();
       }
     }
@@ -47,7 +47,7 @@ const getAdminReservationHistory = async (req, res) => {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error fetching admin reservation history",
+      msg: "Error capturando las reservas",
     });
   }
 };
@@ -61,17 +61,10 @@ const acceptReservation = async (req, res) => {
 
     const adminUser = await User.findById(adminUserId);
 
-    if (!adminUser) {
-      return res.status(401).json({
-        ok: false,
-        msg: "Only administrators are allowed to accept reservations",
-      });
-    }
-
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Only administrators are allowed to accept reservations",
+        msg: "Solo los administradores estan autorizados a aceptar reservas",
       });
     }
 
@@ -80,27 +73,27 @@ const acceptReservation = async (req, res) => {
     if (!reservation) {
       return res.status(404).json({
         ok: false,
-        msg: "Reservation not found",
+        msg: "Reservación no encontrada",
       });
     }
 
-    if (reservation.status !== "Pending acceptance") {
+    if (reservation.status !== "Pendiente de aceptación") {
       return res.status(400).json({
         ok: false,
-        msg: "Reservation cannot be accepted in its current status",
+        msg: "La reservación no puede ser aceptada en su estatus actual",
       });
     }
 
-    // Verificar si ya existe una reserva "Accepted" para el mismo juego
-    const existingAcceptedReservation = await Reservation.findOne({
+    // Verificar si ya existe una reserva "Aceptada" para el mismo juego
+    const existingAceptedReservation = await Reservation.findOne({
       game: reservation.game,
-      status: "Accepted",
+      status: "Aceptada",
     });
 
-    if (existingAcceptedReservation) {
+    if (existingAceptedReservation) {
       return res.status(400).json({
         ok: false,
-        msg: "Another reservation for this game has already been accepted",
+        msg: "Ya existe una reservación aceptada para este juego",
       });
     }
 
@@ -113,7 +106,7 @@ const acceptReservation = async (req, res) => {
       if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
         const parsedExpirationDate = new Date(year, month - 1, day);
         reservation.expirationDate = parsedExpirationDate;
-        reservation.status = "Accepted";
+        reservation.status = "Aceptada";
 
         const userWhoReserved = await User.findById(reservation.user);
         const userEmail = userWhoReserved.email;
@@ -137,26 +130,21 @@ const acceptReservation = async (req, res) => {
 
         res.json({
           ok: true,
-          msg: "Reservation accepted successfully",
+          msg: "Reservación aceptada correctamente",
           reservation,
         });
       } else {
         res.status(400).json({
           ok: false,
-          msg: "Invalid date format for expirationDate",
+          msg: "Formato de fecha invalido",
         });
       }
-    } else {
-      res.status(400).json({
-        ok: false,
-        msg: "Invalid date format for expirationDate",
-      });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error accepting reservation",
+      msg: "Error aceptando la reservación",
     });
   }
 };
@@ -174,7 +162,7 @@ const rejectReservation = async (req, res) => {
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Only administrators are allowed to reject reservations",
+        msg: "Solo los administradores pueden rechazar reservaciones",
       });
     }
 
@@ -183,20 +171,23 @@ const rejectReservation = async (req, res) => {
     if (!reservation) {
       return res.status(404).json({
         ok: false,
-        msg: "Reservation not found",
+        msg: "Reservación no encontrada",
       });
     }
 
-    if (reservation.status !== "Pending acceptance"  && reservation.status !== "Accepted") {
+    if (
+      reservation.status !== "Pendiente de aceptación" &&
+      reservation.status !== "Aceptada"
+    ) {
       return res.status(400).json({
         ok: false,
-        msg: "Reservation cannot be rejected in its current status",
+        msg: "La reservación no puede ser rechazada en su estatus actual",
       });
     }
 
     const game = await BoardGame.findById(reservation.game);
 
-    reservation.status = "Rejected";
+    reservation.status = "Rechazada";
     reservation.rejectionReason = rejectionReason;
 
     // Obtener el email del usuario que realizó la reserva
@@ -210,14 +201,14 @@ const rejectReservation = async (req, res) => {
 
     res.json({
       ok: true,
-      msg: "Reservation rejected successfully",
+      msg: "Reservación rechazada correctamente",
       reservation,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error rejecting reservation",
+      msg: "Error rechazando la reservación",
     });
   }
 };
@@ -234,7 +225,7 @@ const markAsPickedUp = async (req, res) => {
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Only administrators are allowed to mark reservations as picked up",
+        msg: "Solo los administradores pueden marcar como recogida una reservación",
       });
     }
 
@@ -243,18 +234,18 @@ const markAsPickedUp = async (req, res) => {
     if (!reservation) {
       return res.status(404).json({
         ok: false,
-        msg: "Reservation not found",
+        msg: "Reservación no encontrada",
       });
     }
 
-    if (reservation.status !== "Accepted") {
+    if (reservation.status !== "Aceptada") {
       return res.status(400).json({
         ok: false,
-        msg: "Reservation cannot be marked as picked up in its current status",
+        msg: "La reservación no puede ser marcada como recogida",
       });
     }
 
-    reservation.status = "Picked up";
+    reservation.status = "Recogido";
     const game = await BoardGame.findById(reservation.game);
 
     // Obtener el email del usuario que realizó la reserva
@@ -269,14 +260,14 @@ const markAsPickedUp = async (req, res) => {
 
     res.json({
       ok: true,
-      msg: "Reservation marked as picked up successfully",
+      msg: "Reservación marcada como recogida correctamente",
       reservation,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error marking reservation as picked up",
+      msg: "Error marcando reservación como recogida",
     });
   }
 };
@@ -293,7 +284,7 @@ const markAsCompleted = async (req, res) => {
     if (adminUser.role !== "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Only administrators are allowed to mark reservations as completed",
+        msg: "Solo los administradores pueden marcar una reserva como completada",
       });
     }
 
@@ -302,14 +293,14 @@ const markAsCompleted = async (req, res) => {
     if (!reservation) {
       return res.status(404).json({
         ok: false,
-        msg: "Reservation not found",
+        msg: "Reservación no encontrada",
       });
     }
 
-    if (reservation.status !== "Picked up") {
+    if (reservation.status !== "Recogido") {
       return res.status(400).json({
         ok: false,
-        msg: "Reservation cannot be marked as completed in its current status",
+        msg: "La reservación no puede ser marcada como recogida en su estatus actual",
       });
     }
 
@@ -320,7 +311,7 @@ const markAsCompleted = async (req, res) => {
       await game.save();
     }
 
-    reservation.status = "Completed";
+    reservation.status = "Completada";
     reservation.endDate = new Date(); // Agregar la fecha actual como fecha de entrega
     await reservation.save();
 
@@ -333,14 +324,14 @@ const markAsCompleted = async (req, res) => {
 
     res.json({
       ok: true,
-      msg: "Reservation marked as completed successfully",
+      msg: "Reservación marcada como completada correctamente",
       reservation,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error marking reservation as completed",
+      msg: "Error marcando reservación como completada",
     });
   }
 };
@@ -364,7 +355,7 @@ const getReservationsByStatus = async (req, res) => {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error fetching reservations by status",
+      msg: "Error capturando las reservaciones",
     });
   }
 };

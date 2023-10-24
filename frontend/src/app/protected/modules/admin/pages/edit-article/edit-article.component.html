@@ -1,0 +1,33 @@
+<app-header></app-header>
+
+<div class="container mx-auto">
+    <div class="w-full max-w-md mx-auto mt-10">
+      <form [formGroup]="editArticleForm" (ngSubmit)="updateArticle()" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h1 class="text-2xl font-bold text-center mb-4">Editar Artículo</h1>
+  
+        <!-- Título del artículo -->
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Título</label>
+          <input formControlName="title" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="title">
+        </div>
+  
+        <!-- Texto del artículo -->
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="text">Texto</label>
+          <textarea formControlName="text" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4" id="text"></textarea>
+        </div>
+  
+        <!-- Etiquetas -->
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="tags">Etiquetas (separadas por comas)</label>
+          <input formControlName="tags" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="tags">
+        </div>
+  
+        <div class="flex items-center justify-between mt-6">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Actualizar Artículo</button>
+          <button class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" routerLink="/dashboard/blog" type="button">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

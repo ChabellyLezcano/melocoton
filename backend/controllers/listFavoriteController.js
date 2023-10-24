@@ -1,7 +1,6 @@
 const FavoriteGame = require("../models/Favorite");
 const BoardGame = require("../models/Boardgame");
 
-
 // Marcar como favorito
 const markAsFavorite = async (req, res) => {
   try {
@@ -14,7 +13,7 @@ const markAsFavorite = async (req, res) => {
     if (!gameExists) {
       return res
         .status(404)
-        .json({ message: "The game does not exist in the database" });
+        .json({ ok: false, msg: "El juego no existe en la base de datos" });
     }
 
     const existingFavorite = await FavoriteGame.findOne({
@@ -25,7 +24,7 @@ const markAsFavorite = async (req, res) => {
     if (existingFavorite) {
       return res
         .status(400)
-        .json({ message: "The game is already marked as a favorite" });
+        .json({ ok: false, msg: "El juego ya está marcado como favorito" });
     }
 
     const favorite = new FavoriteGame({
@@ -35,13 +34,14 @@ const markAsFavorite = async (req, res) => {
 
     await favorite.save();
 
-    res.status(201).json({ message: "Game marked as a favorite" });
+    res.status(201).json({ ok: true, msg: "Juego marcado como favorito" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ ok: false, msg: "Error marcando juego como favoritp" });
   }
 };
-
 
 // Desmarcar como favorito
 const unmarkAsFavorite = async (req, res) => {
@@ -57,16 +57,17 @@ const unmarkAsFavorite = async (req, res) => {
     if (!existingFavorite) {
       return res
         .status(404)
-        .json({ message: "The game is not marked as a favorite" });
+        .json({ ok: false, message: "El juego no está marcado como favorito" });
     }
 
-    res.status(200).json({ message: "Game unmarked as a favorite" });
+    res.status(200).json({ ok: true, message: "Juego quitado de favoritos" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ ok: false, msg: "Error quitando juego como favorito" });
   }
 };
-
 
 // Listar los juegos favoritos del usuario
 const listFavorites = async (req, res) => {
@@ -85,13 +86,19 @@ const listFavorites = async (req, res) => {
 
     const gameDetails = await Promise.all(gameDetailsPromises);
 
-    res.status(200).json(gameDetails);
+    res.status(200).json({
+      ok: true,
+      msg: "Listado de juetgos favoritos obtenido",
+      gameDetails,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      ok: false,
+      message: "Error listando los juegos de mesa favoritos",
+    });
   }
 };
-
 
 module.exports = {
   markAsFavorite,

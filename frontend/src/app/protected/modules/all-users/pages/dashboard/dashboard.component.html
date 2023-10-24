@@ -1,0 +1,58 @@
+<app-header></app-header>
+
+<div class="mt-4">
+  <button
+    class="bg-blue-500 text-white rounded-full py-2 px-4"
+    style="background-color: #5982e8;"
+    (click)="onAddGameClick()"
+  >
+    Añadir Juego
+  </button>
+</div>
+
+<div *ngIf="games && games.length > 0">
+  <div class="game-list flex flex-wrap -mx-4">
+    <div
+      *ngFor="let game of games"
+      class="game-card w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-4 mb-4"
+    >
+    <div class="bg-white rounded-lg shadow-lg p-4">
+      <img
+      [src]="game.photo ? game.photo : '../../../../../../assets/empty-box.jpg'"
+        alt="{{ game?.title }}"
+        class="w-full max-h-48 object-contain rounded-t-lg"
+        [ngClass]="{'disabled': isGameUnavailable(game)}"
+      />
+      <div class="p-4" [ngClass]="{'disabled': isGameUnavailable(game)}">
+        <h2 class="text-xl font-semibold">{{ game?.title }}</h2>
+        <p class="text-green-500 flex items-center">
+          <i
+            [ngStyle]="{
+              color: game?.status === 'Disponible' ? 'green-500' : 'gray'
+            }"
+            class="pi pi-circle-fill mr-2"
+          ></i>
+          <span [ngStyle]="{'color': game?.status === 'Disponible' ? 'green' : 'gray'}">
+            {{ game.status === "Disponible" ? "Disponible" : "No Disponible" }}
+          </span>
+          <span class="ml-auto"></span>
+  
+          <button
+            class="bg-blue-500 text-white rounded-full py-2 px-4"
+            [ngStyle]="{'background-color': isGameUnavailable(game) }"
+            (click)="onVerClick(game._id)"
+          >
+            Ver
+          </button>
+        </p>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<p-paginator
+  [rows]="rows"
+  [totalRecords]="totalRecords"
+  (onPage)="onPageChange($event)"
+></p-paginator>

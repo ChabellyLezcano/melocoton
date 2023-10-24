@@ -7,13 +7,13 @@
     <ng-template pTemplate="content">
         <ul class="space-y-8 p-5">
             <li>
-              <a routerLink="/dashboard-admin" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+              <a routerLink="/dashboard" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
                 <i class="pi pi-home text-xl"></i> <!-- Icono de gráfico de línea -->
                 <span>Dashboard</span>
               </a>
             </li>
             <li>
-              <a routerLink="/foro" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+              <a routerLink="/dashboard/forum" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
                 <i class="pi pi-comments text-xl"></i> <!-- Icono de comentarios -->
                 <span>Foro</span>
               </a>
@@ -25,19 +25,19 @@
               </a>
             </li>
             <li>
-              <a routerLink="/historial-general" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
+              <a routerLink="/favorites" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
                 <i class="pi pi-star text-xl"></i> <!-- Icono de estrella -->
                 <span>Favoritos</span>
               </a>
             </li>
             <li>
-              <a routerLink="/recomendaciones" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
+              <a routerLink="/user/recommendation" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-xl p-2 rounded text-lg">
                 <i class="pi pi-thumbs-up text-xl"></i> <!-- Icono de pulgar arriba -->
                 <span>Recomendaciones</span>
               </a>
             </li>
             <li>
-              <a routerLink="/blog" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
+              <a routerLink="/dashboard/blog" (click)="sidebarVisible = false" class="flex items-center space-x-2 hover:shadow-md p-2 rounded text-lg">
                 <i class="pi pi-pencil text-xl"></i> <!-- Icono de lápiz -->
                 <span>Blog</span>
               </a>

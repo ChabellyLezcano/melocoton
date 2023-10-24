@@ -5,14 +5,17 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, required: true },
+  role: { type: String, required: true,  enum: [
+    "Current",
+    "Admin",
+  ] },
   token: { type: String, default: null },
   authenticated: { type: Boolean, default: false },
   accountStatus: {  type: String,
     enum: [
-      "Active",
-      "Blocked",
-    ], default: "Active" },
+      "Activo",
+      "Bloqueado",
+    ], default: "Activo" },
 });
 
 const User = mongoose.model("User", userSchema);

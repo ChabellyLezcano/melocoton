@@ -22,16 +22,16 @@ router.get("/reservations", getAdminReservationHistory);
 router.get("/reservations-by-status/:status", getReservationsByStatus);
 
 // Accept a reservation (reservationId is passed in the URL)
-router.post("/reservations/accept/:reservationId", acceptReservation);
+router.post("/accept-reservation/:reservationId", acceptReservation);
 
 // Reject a reservation (reservationId is passed in the URL)
-router.post("/reservations/reject/:reservationId", rejectReservation);
+router.post("/reject-reservation/:reservationId", rejectReservation);
 
 // Mark a reservation as completed (reservationId is passed in the URL)
-router.post("/reservations/mark-as-completed/:reservationId", markAsCompleted);
+router.post("/mark-as-completed-reservation/:reservationId", markAsCompleted);
 
 // Mark a reservation as picked up by the user (reservationId is passed in the URL)
-router.post("/reservations/mark-as-picked-up/:reservationId", markAsPickedUp);
+router.post("/mark-as-picked-up-reservation/:reservationId", markAsPickedUp);
 
 
 module.exports = router;

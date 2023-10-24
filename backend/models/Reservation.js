@@ -16,15 +16,15 @@ const reservationSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: [
-      "Pending acceptance",
-      "Accepted",
-      "Rejected",
-      "Canceled",
-      "Picked up",
-      "Expired",
-      "Completed",
+      "Pendiente de aceptación",
+      "Aceptada",
+      "Rechazada",
+      "Anulada",
+      "Recogido",
+      "Expirada",
+      "Completada",
     ],
-    default: "Pending acceptance",
+    default: "Pendiente de aceptación",
 
   },
   rejectionReason: String,

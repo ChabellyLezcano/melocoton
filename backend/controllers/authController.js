@@ -105,7 +105,7 @@ const loginUser = async (req, res) => {
     }
 
     // Check if the account is confirmed (authenticated is true)
-    if (!user.accountStatus === "Blocked") {
+    if (!user.accountStatus === "Bloqueado") {
       return res.status(401).json({
         ok: false,
         msg: "Su usuario se encuentra bloqueado",
@@ -360,68 +360,6 @@ const revalidateToken = async (req, res) => {
   }
 };
 
-// Comprobar si un usuario es admin
-const userIsAdmin = async (req, res) => {
-  const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
-  try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({
-        ok: false,
-        msg: "El usuario no existe",
-      });
-    }
-
-    if (user.role === "Admin") {
-      // El usuario es un administrador
-      return res.status(200).json({
-        ok: true,
-        msg: "Eres un administrador. Acceso permitido.",
-      });
-    } else {
-      // El usuario no es un administrador
-      return res.status(403).json({
-        ok: false,
-        msg: "No eres un administrador. Acceso denegado.",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      ok: false,
-      msg: "Error en el servidor",
-    });
-  }
-};
-
-// Obtener información del usuario
-const userInfo = async (req, res) => {
-  const userId = req.id; // Suponiendo que el id del usuario se encuentra en req.user.id
-  try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({
-        ok: false,
-        msg: "El usuario no existe",
-      });
-    }
-
-    return res.status(200).json({
-      ok: true,
-      msg: "Info del usuario obtenida",
-      user,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      ok: false,
-      msg: "Error en el servidor",
-    });
-  }
-};
-
 module.exports = {
   createUser,
   loginUser,
@@ -430,6 +368,4 @@ module.exports = {
   checkToken,
   newPassword,
   revalidateToken,
-  userIsAdmin,
-  userInfo,
 };

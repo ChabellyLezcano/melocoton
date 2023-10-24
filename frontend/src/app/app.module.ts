@@ -7,10 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
-import { AdminModule } from './protected/admin/admin.module';
-import { UserModule } from './protected/user/user.module';
+import { UserModule } from './protected/modules/user/user.module';
 import { SharedModule } from './shared/shared.module';
-
+import { AdminModule } from './protected/modules/admin/admin.module';
 
 @NgModule({
   declarations: [

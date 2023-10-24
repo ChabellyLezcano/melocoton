@@ -52,7 +52,7 @@ router.delete("/delete-game/:id", deleteBoardGame);
 router.get("/games", getBoardGames);
 
 // Get a single board game by ID
-router.get("/get-single-game/:id", getBoardGameById);
+router.get("/get-game/:id", getBoardGameById);
 
 router.put('/upload-photo/:id', upload.single('photo'), updateBoardGamePhoto);
 

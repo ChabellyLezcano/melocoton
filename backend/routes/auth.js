@@ -8,8 +8,6 @@ const {
   checkToken,
   newPassword,
   revalidateToken,
-  userIsAdmin,
-  userInfo,
 } = require("../controllers/authController");
 
 const { validateFields } = require("../middlewares/validate-fields");
@@ -18,18 +16,18 @@ const { validateJWT } = require("../middlewares/validate-jwt");
 const router = Router();
 
 // Registro del usuario
-router.post(
-  "/register",
-  validateFields,
-  createUser
-);
+router.post("/register", validateFields, createUser);
 
 // Login
 router.post(
   "/",
   [
-    check("email", "Please enter a valid email address").isEmail(),
-    check("password", "Password is required").not().isEmpty(),
+    check("email", "El email es obligatorio").not().isEmpty(),
+    check("email", "Introduzca un email válido").isEmail(),
+    check("password", "La contraseña es obligatoria").not().isEmpty(),
+    check("password", "La contraseña debe tener mínimo 8 caracteres").isLength({
+      min: 8,
+    }),
   ],
   validateFields,
   loginUser
@@ -41,19 +39,23 @@ router.get("/confirm-account/:token", confirmAccount);
 // Olvidé paswword
 router.post(
   "/forgot-password",
-  [check("email", "Please enter a valid email address").isEmail()],
+  [
+    check("email", "El email es obligatorio").not().isEmpty(),
+    check("email", "Introduzca un email válido").isEmail()
+  ],
   validateFields,
   forgotPassword
 );
 
-// Restablecer token
+// Restablecer password
 router.post(
   "/reset-password/:token",
   [
+    check("newPassword", "La contraseña es obligatoria").not().isEmpty(),
     check(
       "newPassword",
-      "New password must be at least 6 characters long"
-    ).isLength({ min: 6 }),
+      "La contraseña debe tener mínimo 8 caracteres"
+    ).isLength({ min: 8 }),
   ],
   validateFields,
   newPassword
@@ -64,11 +66,5 @@ router.get("/check-token/:token", checkToken);
 
 // Validar y revalidar token
 router.get("/renew", validateJWT, revalidateToken);
-
-router.get('/user-is-admin', validateJWT, userIsAdmin);
-
-
-router.get('/user-info', validateJWT, userInfo);
-
 
 module.exports = router;

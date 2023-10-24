@@ -12,15 +12,22 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: 'dashboard-admin',
-    loadChildren: () => import('./protected/admin/admin.module').then(m => m.AdminModule),
-    canActivate: [ValidarTokenGuard, AdminGuard], // Aplicadas a rutas principales
+    path: 'admin',
+    loadChildren: () => import('./protected/modules/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [ValidarTokenGuard, AdminGuard], 
     canLoad: [ValidarTokenGuard],
   },
   {
-    path: 'dashboard-user',
-    loadChildren: () => import('./protected/user/user.module').then(m => m.UserModule),
-    canActivate: [ValidarTokenGuard, UserGuard], // Aplicadas a rutas principales
+    path: 'user',
+    loadChildren: () => import('./protected/modules/user/user.module').then(m => m.UserModule),
+    canActivate: [ValidarTokenGuard, UserGuard], 
+    canLoad: [ValidarTokenGuard],
+  
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./protected/modules/all-users/all-users.module').then(m => m.AllUsersModule),
+    canActivate: [ValidarTokenGuard],
     canLoad: [ValidarTokenGuard],
   
   }

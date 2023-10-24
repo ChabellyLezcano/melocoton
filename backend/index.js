@@ -6,7 +6,7 @@ const http = require("http");
 const socketIo = require("socket.io");
 
 const { dbConnection } = require("./config/database");
-const configureCloudinary = require ("./config/cloudinary");
+const configureCloudinary = require("./config/cloudinary");
 const Boardgame = require("./models/Boardgame");
 require("dotenv").config();
 
@@ -23,7 +23,6 @@ app.use((req, res, next) => {
   req.io = io; // Asignar la instancia de Socket.IO a req.io
   next();
 });
-
 
 // Conexión a la base de datos
 dbConnection();
@@ -50,15 +49,11 @@ app.use("/api/review", require("./routes/review"));
 app.use("/api/forum", require("./routes/message_forum"));
 app.use("/api/favorite", require("./routes/listFavorite"));
 app.use("/api/recommendation", require("./routes/recommendation"));
-app.use("/api/users", require("./routes/user"));
+app.use("/api/user", require("./routes/user"));
 app.use("/api/blog", require("./routes/blog"));
-
-
-
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-

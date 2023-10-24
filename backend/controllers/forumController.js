@@ -35,7 +35,6 @@ const getAllMessages = async (req, res) => {
       })
       .exec();
 
-
     return res
       .status(200)
       .json({ ok: true, msg: "Lista de mensajes", messages });

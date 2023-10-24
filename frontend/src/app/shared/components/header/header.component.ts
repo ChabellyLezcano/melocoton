@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit {
     this.userDataService.userData$.subscribe((user) => {
       if (user) {
         this.user = user;
-        console.log("Header" + user.username)
         if (user.role === 'Admin') {
           this.isAdmin = true;
         }
@@ -36,10 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   redirectToDashboard() {
-    if (this.isAdmin) {
-      this.router.navigate(['/dashboard-admin']);
-    } else {
-      this.router.navigate(['/dashboard-user']);
-    }
+    
+      this.router.navigate(['/dashboard']);
   }
 }

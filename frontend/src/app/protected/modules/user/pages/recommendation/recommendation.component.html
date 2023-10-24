@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div *ngIf="recommendedGames && recommendedGames.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 m-4">
+  <div *ngFor="let game of recommendedGames" class="bg-white rounded-lg shadow-md">
+    <img [src]="game.photo || 'assets/default-game-photo.png'" class="w-full h-48 object-contain rounded-t-lg" alt="Game Image">
+    
+    <div class="p-4">
+      <h5 class="text-xl font-semibold">{{ game.title }}</h5>
+      <div class="flex flex-wrap mt-2">
+        <ng-container *ngFor="let tag of game.tags">
+          <span class="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 mr-2 m-1">{{ tag }}</span>
+        </ng-container>
+      </div>
+      <p class="text-gray-700 text-sm">{{ game.description }}</p>
+     <div class="mx-auto justify-center flex m-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 mx-auto rounded-full" (click)="onVerClick(game._id)">
+            Ver
+          </button>
+     </div>
+    </div>
+  </div>
+</div>

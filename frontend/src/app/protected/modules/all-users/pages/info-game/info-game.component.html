@@ -1,0 +1,97 @@
+<app-header></app-header>
+<div *ngIf="game">
+  <h1 class="text-2xl font-bold text-center mb-4">{{ game.game.title }}</h1>
+  <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Contenedor de la foto a la izquierda -->
+    <div class="md:col-span-1 mx-auto">
+      <div class="max-w-90 h-90 mx-auto">
+        <div class="rounded-lg" style="height: 100%">
+          <img
+  [src]="game.game.photo ? game.game.photo : '../../../../../../assets/empty-box.jpg'"
+  alt="{{ game.game.title }}"
+  class="w-90 h-90 rounded-lg object-cover"
+/>
+
+        </div>
+      </div>
+      <div class="md:col-span-1 text-center mt-4">
+        <p class="text-teal-500 font-bold">{{ game.game.code }}</p>
+      </div>
+    </div>
+
+    <!-- Contenedor de contenido a la derecha (etiquetas, descripción, reglas, objetivo y botones) -->
+    <div class="md:col-span-1">
+      <div class="mt-4 p-4 rounded-lg my-4">
+        <!-- Etiquetas -->
+        <div class="flex flex-wrap gap-2 mx-auto ml-auto justify-center">
+          <span
+            *ngFor="let tag of tagsArray"
+            class="rounded-full bg-gray-100 border border-violet-500 text-violet-500 p-2"
+          >{{ tag }}</span>
+        </div>
+      </div>
+
+      <div class="mt-4 p-4 bg-gray-100 rounded-lg my-4">
+        <!-- Descripción -->
+        <h2 class="text-rose-500 text-center mb-2">¿De qué va?</h2>
+        <p class="text-gray-600">{{ game.game.description }}</p>
+      </div>
+
+      <div class="mt-4 p-4 bg-gray-100 rounded-lg my-4">
+        <!-- Reglas -->
+        <h2 class="text-amber-500 text-center mb-2">Reglas</h2>
+        <p class="text-gray-600">{{ game.game.rules }}</p>
+      </div>
+
+      <div class="mt-4 p-4 bg-gray-100 rounded-lg my-4">
+        <!-- Objetivo -->
+        <h2 class="text-sky-500 text-center mb-2">Objetivo</h2>
+        <p class="text-gray-600">{{ game.game.objective || "No especificado" }}</p>
+      </div>
+
+    <!-- Contenedor de botones (Editar y Eliminar) -->
+<div class="flex justify-center space-x-4 mt-4">
+  <ng-container *ngIf="isAdmin">
+    <button class="bg-blue-500 text-white rounded-full py-2 px-4" (click)="onEditClick(gameId)">
+      Editar
+    </button>
+    <button class="bg-red-500 text-white rounded-full py-2 px-4" (click)="onDeleteClick(gameId)">
+      Eliminar
+    </button>
+    <button class="bg-emerald-500 text-white rounded-full py-2 px-4" (click)="onAddPhotoClick(gameId)">
+      Agregar Foto
+    </button>
+  </ng-container>
+  <ng-container *ngIf="!isAdmin">
+    <button class="bg-blue-500 text-white rounded-full py-2 px-4">
+      Reservar
+    </button>
+  </ng-container>
+
+
+      </div>
+    </div>
+    
+    
+  </div>
+  <div class="mt-8 p-4 rounded-lg my-4 mx-auto text-center">
+    <h1 class="text-rose-500 text-center mb-4">Galería de imágenes</h1>
+    <div class="flex justify-center items-center">
+      <div class="mx-auto">
+        <p-carousel [value]="game.game.gallery_images" [responsiveOptions]="responsiveOptions" [circular]="true">
+          <ng-template let-image pTemplate="item">
+            <div class="mb-4 max-h-100">
+              <div class="image-container flex justify-center items-center rounded-lg border-none p-4">
+                <img [src]="image.path" alt="{{ image.label }}" class="max-w-full max-h-full object-contain rounded-lg">
+              </div>
+            </div>
+          </ng-template>
+        </p-carousel>
+      </div>
+    </div>
+  </div>
+ 
+  <div *ngIf="!game" class="text-center p-4">
+    <p class="text-gray-600">Cargando...</p>
+  </div>
+

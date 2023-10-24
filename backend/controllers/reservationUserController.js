@@ -6,19 +6,19 @@ const {
   sendEmailCancelReservation,
 } = require("../helpers/email");
 
-const {generateRandCodeReservation} = require("../helpers/generateRandCode")
+const { generateRandCodeReservation } = require("../helpers/generateRandCode");
 
 const createReservation = async (req, res) => {
   try {
     const gameId = req.params.gameId;
-    const user = req.id;
+    const userId = req.id;
 
-    const dbUser = await User.findById(user);
+    const user = await User.findById(userId);
 
-    if (dbUser.role === "Admin") {
+    if (user.role === "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Administrators are not allowed to create reservations",
+        msg: "Los administradores no pueden crear reservas",
       });
     }
 
@@ -27,14 +27,14 @@ const createReservation = async (req, res) => {
     if (!game) {
       return res.status(404).json({
         ok: false,
-        msg: "Game not found",
+        msg: "Juego no encontrado",
       });
     }
 
     if (game.status !== "Disponible") {
       return res.status(400).json({
         ok: false,
-        msg: "The game is not available for reservation",
+        msg: "El juego no está disponible para su reserva",
       });
     }
 
@@ -51,7 +51,6 @@ const createReservation = async (req, res) => {
       }
     }
 
-
     const newReservation = new Reservation({
       game: gameId,
       user,
@@ -61,18 +60,18 @@ const createReservation = async (req, res) => {
     const reservation = await newReservation.save();
 
     // Enviar un correo de confirmación al usuario
-    await sendEmailNewReservation(dbUser.email, reservation, game, dbUser.username);
+    await sendEmailNewReservation(user.email, reservation, game, user.username);
 
     res.status(201).json({
       ok: true,
-      msg: "Reservation created successfully",
+      msg: "Reservación creada correctamente",
       reservation,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error creating reservation",
+      msg: "Error creando reservación",
     });
   }
 };
@@ -82,7 +81,7 @@ const getUserReservationHistory = async (req, res) => {
     const userId = req.id; // Assuming user information is available in the request
     const reservations = await Reservation.find({ user: userId });
 
-    console.log(reservations)
+    console.log(reservations);
 
     // Actualizar el estado de las reservas "Accepted" con fecha de vencimiento pasada
     for (const reservation of reservations) {
@@ -111,14 +110,14 @@ const getUserReservationHistory = async (req, res) => {
 const cancelReservation = async (req, res) => {
   try {
     const { reservationId } = req.params;
-    const user = req.id;
+    const userId = req.id;
 
-    const dbUser = await User.findById(user);
+    const user = await User.findById(userId);
 
-    if (dbUser.role === "Admin") {
+    if (user.role === "Admin") {
       return res.status(401).json({
         ok: false,
-        msg: "Administrators are not allowed to create reservations",
+        msg: "Los administradores no pueden anular reservaciones",
       });
     }
 
@@ -127,28 +126,25 @@ const cancelReservation = async (req, res) => {
     if (!reservation) {
       return res.status(404).json({
         ok: false,
-        msg: "Reservation not found",
+        msg: "Reservación no encontrada",
       });
     }
 
-    if (
-      reservation.status === "Canceled" ||
-      reservation.status === "Picked up"
-    ) {
+    if (reservation.status === "Anulada" || reservation.status === "Recogido") {
       return res.status(400).json({
         ok: false,
-        msg: "Reservation cannot be canceled in its current status",
+        msg: "La reservación no puede ser cancelada en su estatus actual",
       });
     }
 
     if (!user) {
       return res.status(401).json({
         ok: false,
-        msg: "User not authenticated or missing user ID",
+        msg: "Usuario no encontrado",
       });
     }
 
-    reservation.status = "Canceled";
+    reservation.status = "Anulada";
 
     await reservation.save();
 
@@ -158,27 +154,31 @@ const cancelReservation = async (req, res) => {
     if (!game) {
       return res.status(404).json({
         ok: false,
-        msg: "Game not found",
+        msg: "Juego no encontrado",
       });
     }
 
     // Send a confirmation email to the user
-    await sendEmailCancelReservation(dbUser.email, reservation, game, dbUser.username);
+    await sendEmailCancelReservation(
+      user.email,
+      reservation,
+      game,
+      user.username
+    );
 
     res.json({
       ok: true,
-      msg: "Reservation canceled successfully",
+      msg: "Reservación cancelada correctamente",
       reservation,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error canceling reservation",
+      msg: "Error cancelando reserva",
     });
   }
 };
-
 
 module.exports = {
   createReservation,

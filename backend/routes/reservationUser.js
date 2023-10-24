@@ -16,7 +16,7 @@ router.use(validateJWT, validateFields);
 router.post("/add-reservation/:gameId", createReservation);
 
 // Route to get the user's reservation history
-router.get("/user/reservations", getUserReservationHistory);
+router.get("/reservations", getUserReservationHistory);
 
 // Route to cancel a reservation by its ID
 router.post("/cancel-reservation/:reservationId", cancelReservation);

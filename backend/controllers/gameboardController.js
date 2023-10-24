@@ -1,5 +1,4 @@
-const {  generateRandCode } = require("../helpers/generateRandCode");
-const { shuffleArrayNoChangeOrden } = require("../helpers/ordenArray");
+const { generateRandCode } = require("../helpers/generateRandCode");
 const BoardGame = require("../models/Boardgame");
 const { User } = require("../models/User");
 
@@ -42,11 +41,9 @@ const createBoardGame = async (req, res) => {
       status,
       objective,
       rules,
-      tags: tags.split(',').map(tag => tag.trim()),
+      tags: tags.split(",").map((tag) => tag.trim()),
       code, // Add the generated code to the game
     });
-
-    console.log(newBoardGame)
 
     const createdGame = await newBoardGame.save();
 
@@ -96,7 +93,6 @@ const deleteBoardGame = async (req, res) => {
   }
 };
 
-
 // Editar juego de mesa
 const editBoardGame = async (req, res) => {
   const { id } = req.params;
@@ -116,8 +112,8 @@ const editBoardGame = async (req, res) => {
     const gameData = req.body;
 
     // Verificamos si 'tags' está presente y es una cadena
-    if (typeof gameData.tags === 'string') {
-      gameData.tags = gameData.tags.split(',').map(tag => tag.trim());
+    if (typeof gameData.tags === "string") {
+      gameData.tags = gameData.tags.split(",").map((tag) => tag.trim());
     }
 
     // Elimina el campo 'code' para evitar cambios accidentales en el código
@@ -142,14 +138,11 @@ const editBoardGame = async (req, res) => {
   }
 };
 
-
-
 // Listar juegos de mesa disponibles
 const getBoardGames = async (req, res) => {
   try {
     const games = await BoardGame.find();
 
-    
     res.json({
       ok: true,
       games: games,
@@ -158,7 +151,7 @@ const getBoardGames = async (req, res) => {
     console.log(error);
     res.status(500).json({
       ok: false,
-      msg: "Error inesperado. Contacte con el administrador",
+      msg: "Error obteniendo los juegos de mesa",
     });
   }
 };
@@ -196,13 +189,13 @@ const getBoardGameById = async (req, res) => {
 const updateBoardGamePhoto = async (req, res) => {
   const { id } = req.params;
 
-  const userId = req.id
+  const userId = req.id;
 
   try {
     const user = await User.findById(userId);
 
     // Verificar si el usuario que realiza la solicitud es un administrador
-    if (user.role !== 'Admin') {
+    if (user.role !== "Admin") {
       return res.status(403).json({
         ok: false,
         msg: "No estás autorizado para realizar esta operación. Solo los administradores pueden actualizar fotos de juegos de mesa",
@@ -253,11 +246,10 @@ const updateBoardGameGalleryImages = async (req, res) => {
   const userId = req.id;
 
   try {
-
     const user = await User.findById(userId);
 
     // Verificar si el usuario que realiza la solicitud es un administrador
-    if (user.role !== 'Admin') {
+    if (user.role !== "Admin") {
       return res.status(403).json({
         ok: false,
         msg: "No estás autorizado para realizar esta operación. Solo los administradores pueden actualizar fotos de juegos de mesa",
@@ -325,5 +317,5 @@ module.exports = {
   getBoardGames,
   getBoardGameById,
   updateBoardGamePhoto,
-  updateBoardGameGalleryImages 
+  updateBoardGameGalleryImages,
 };

@@ -10,6 +10,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import {CarouselModule} from 'primeng/carousel';
 import { DropdownModule } from 'primeng/dropdown';
 
+
 @NgModule({
   declarations: [],
   imports: [

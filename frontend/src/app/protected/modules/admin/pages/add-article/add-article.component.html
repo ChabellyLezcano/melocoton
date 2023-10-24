@@ -1,0 +1,27 @@
+<form [formGroup]="articleForm" (ngSubmit)="createArticle()" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">Crear un Nuevo Artículo</h2>
+    <div class="mb-4">
+      <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Título</label>
+      <input type="text" id="title" formControlName="title" class="w-full px-3 py-2 leading-tight border rounded-lg appearance-none focus:outline-none focus:shadow-outline" placeholder="Título del artículo">
+    </div>
+    <div class="mb-4">
+      <label for="text" class="block text-gray-700 text-sm font-bold mb-2">Texto</label>
+      <textarea id="text" formControlName="text" class="w-full px-3 py-2 leading-tight border rounded-lg appearance-none focus:outline-none focus:shadow-outline" rows="5" placeholder="Contenido del artículo"></textarea>
+    </div>
+    <div class="mb-4">
+      <label for="tags" class="block text-gray-700 text-sm font-bold mb-2">Etiquetas</label>
+      <input type="text" id="tags" formControlName="tags" class="w-full px-3 py-2 leading-tight border rounded-lg appearance-none focus:outline-none focus:shadow-outline" placeholder="Etiquetas separadas por comas">
+    </div>
+    <div class="mb-4">
+      <label for="photo" class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
+      <input type="file" (change)="onPhotoChange($event)" id="photo" class="appearance-none" accept="image/*">
+    </div>
+  
+    <!-- Agrega otros campos del formulario según tu interfaz -->
+    <div class="mt-6">
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+        Crear Artículo
+      </button>
+    </div>
+  </form>
+  
