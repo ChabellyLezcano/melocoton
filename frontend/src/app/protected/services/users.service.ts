@@ -16,7 +16,7 @@ export class UserService {
   listUsers(): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/list-users`;
     const headers = new HttpHeaders({
-      token: localStorage.getItem('token') || '',
+      token: localStorage.getItem('token') ?? '',
     });
 
     return this.http.get<UserResponse>(url, { headers });
@@ -25,7 +25,7 @@ export class UserService {
   changeToAdmin(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-to-admin/${userId}`;
     const headers = new HttpHeaders({
-      token: localStorage.getItem('token') || '',
+      token: localStorage.getItem('token') ?? '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });
@@ -43,7 +43,7 @@ export class UserService {
   changeAccountStatusToBlocked(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-account-status-to-blocked/${userId}`;
     const headers = new HttpHeaders({
-      token: localStorage.getItem('token') || '',
+      token: localStorage.getItem('token') ?? '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });
@@ -52,7 +52,7 @@ export class UserService {
   changeAccountStatusToActive(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-account-status-to-active/${userId}`;
     const headers = new HttpHeaders({
-      token: localStorage.getItem('token') || '',
+      token: localStorage.getItem('token') ?? '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });

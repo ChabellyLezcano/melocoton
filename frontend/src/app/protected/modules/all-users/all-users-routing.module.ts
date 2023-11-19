@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'forum', component:ForumComponent },
   { path: 'blog', component:BlogComponent },
   { path: 'article/:id', component: ArticleInfoComponent },
+  
 ];
 
 @NgModule({

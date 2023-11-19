@@ -5,50 +5,7 @@
 <div class="text-xl text-center mb-4">Reservaciones</div>
 
 <!-- Buttons section -->
-<div class="flex justify-center space-x-4 my-4">
-  <button
-    class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-600"
-    (click)="filterReservations('all')"
-  >
-    All reservations
-  </button>
-  <button
-    class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-yellow-600"
-    (click)="filterReservations('Pendiente de aceptación')"
-  >
-    Pending acceptance
-  </button>
-  <button
-    class="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600"
-    (click)="filterReservations('Aceptada')"
-  >
-    Accepted
-  </button>
-  <button
-    class="bg-purple-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-purple-600"
-    (click)="filterReservations('Recogida')"
-  >
-    Picked Up
-  </button>
-  <button
-    class="bg-pink-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-pink-600"
-    (click)="filterReservations('Completada')"
-  >
-    Completed
-  </button>
-  <button
-    class="bg-red-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-red-600"
-    (click)="filterReservations('Rechazada')"
-  >
-    Rejected
-  </button>
-  <button
-    class="bg-gray-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-gray-600"
-    (click)="filterReservations('Cancelada')"
-  >
-    Canceled
-  </button>
-</div>
+<app-reservations-buttons (filterChanged)="filterReservations($event)"></app-reservations-buttons>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-4 w-full p-4 mb-4">
   <div *ngFor="let reservation of reservations">

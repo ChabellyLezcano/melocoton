@@ -9,7 +9,8 @@ import { ArticleInfoComponent } from './pages/article-info/article-info.componen
 @NgModule({
   declarations: [
     BlogComponent,
-    ArticleInfoComponent
+    ArticleInfoComponent,
+
   ],
   imports: [
     CommonModule,
