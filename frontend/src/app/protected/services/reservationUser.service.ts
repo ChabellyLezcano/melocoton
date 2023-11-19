@@ -17,7 +17,7 @@ export class ReservationUserService {
     const url = `${this.baseUrl}/reservationUser/add-reservation/${gameId}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     return this.http.post<ReservationResponse>(url, null, { headers });
   }
@@ -37,7 +37,7 @@ export class ReservationUserService {
     const url = `${this.baseUrl}/reservationUser/cancel-reservation/${reservationId}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     return this.http.post<ReservationResponse>(url, null, { headers });
   }

@@ -15,7 +15,7 @@ export class ReviewService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      'token': localStorage.getItem('token') ?? ''
     });
   }
 
@@ -25,7 +25,6 @@ export class ReviewService {
     const url = `${this.baseUrl}/review/create-review/${gameId}`;
     const headers = this.getHeaders();
 
- 
 
     return this.http.post<ReviewResponse>(url, review, { headers }).pipe(
       catchError((error) => {
