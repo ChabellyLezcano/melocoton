@@ -69,36 +69,37 @@ const unmarkAsFavorite = async (req, res) => {
   }
 };
 
-// Listar los juegos favoritos del usuario
 const listFavorites = async (req, res) => {
   try {
     const userId = req.id;
 
     const favoriteGames = await FavoriteGame.find({ user: userId });
 
-    const gameDetailsPromises = favoriteGames.map(async (favorite) => {
-      const game = await BoardGame.findById(favorite.game);
-      return {
-        _id: favorite._id,
-        game: game,
-      };
-    });
+    // Array para almacenar los detalles de los juegos favoritos
+    const gamesWithDetails = [];
 
-    const gameDetails = await Promise.all(gameDetailsPromises);
+    for (const favorite of favoriteGames) {
+      const gameDetails = await BoardGame.findById(favorite.game)
+        .select('title photo description tags');
+
+      gamesWithDetails.push(gameDetails);
+    }
 
     res.status(200).json({
       ok: true,
-      msg: "Listado de juetgos favoritos obtenido",
-      gameDetails,
+      msg: "Listado de juegos favoritos obtenido",
+      games: gamesWithDetails,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      message: "Error listando los juegos de mesa favoritos",
+      msg: "Error listando los juegos de mesa favoritos",
     });
   }
 };
+
+
 
 module.exports = {
   markAsFavorite,

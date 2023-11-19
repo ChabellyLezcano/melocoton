@@ -72,6 +72,7 @@ const getRecommendedGamesByUserId = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getRecommendedGamesByUserId,
   generateRecommendedGames,

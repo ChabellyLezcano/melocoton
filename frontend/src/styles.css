@@ -19,4 +19,15 @@
   scroll-behavior: smooth;
 }
 
+
+.star-icon {
+  font-size: 24px; /* Tamaño de fuente del icono de estrella */
+  color: #ccc; /* Color de estrella no rellena (gris) */
+  margin-right: 5px; /* Espacio entre las estrellas */
+}
+
+.star-icon.filled {
+  color: #ffae00; /* Color de estrella rellena (ámbar) */
+}
+
   

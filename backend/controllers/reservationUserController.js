@@ -22,6 +22,20 @@ const createReservation = async (req, res) => {
       });
     }
 
+    // Verifica si el usuario ya tiene una reserva pendiente
+    const existingPendingReservation = await Reservation.findOne({
+      user: userId,
+      game: gameId,
+      status: "Pendiente de aceptación",
+    });
+
+    if (existingPendingReservation) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Ya tienes una reserva en proceso para este juego. No puedes crear otra en este momento.",
+      });
+    }
+
     const game = await BoardGame.findById(gameId);
 
     if (!game) {
@@ -53,7 +67,7 @@ const createReservation = async (req, res) => {
 
     const newReservation = new Reservation({
       game: gameId,
-      user,
+      user: userId,
       code, // Usa el código único
     });
 
@@ -75,13 +89,15 @@ const createReservation = async (req, res) => {
     });
   }
 };
+;
 
 const getUserReservationHistory = async (req, res) => {
   try {
-    const userId = req.id; // Assuming user information is available in the request
-    const reservations = await Reservation.find({ user: userId });
+    const userId = req.id; // Suponiendo que la información del usuario está disponible en la solicitud
 
-    console.log(reservations);
+    // Utiliza populate para obtener los datos relacionados de Game y User
+    const reservations = await Reservation.find({ user: userId })
+      .populate('game');
 
     // Actualizar el estado de las reservas "Accepted" con fecha de vencimiento pasada
     for (const reservation of reservations) {
@@ -96,16 +112,18 @@ const getUserReservationHistory = async (req, res) => {
 
     res.json({
       ok: true,
+      msg: "Reservaciones del usuario obtenidas",
       reservations,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       ok: false,
-      msg: "Error fetching user reservation history",
+      msg: "Error al obtener el historial de reservaciones del usuario",
     });
   }
 };
+
 
 const cancelReservation = async (req, res) => {
   try {

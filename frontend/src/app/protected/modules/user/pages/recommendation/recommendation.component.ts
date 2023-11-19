@@ -34,7 +34,6 @@ export class RecommendationComponent implements OnInit {
     this.recommendationService
       .generateRecommendedGames()
       .subscribe((response) => {
-        console.log(response);
         if (response.ok) {
           this.recommendedGames = response.recommendedGames;
           this.getRecommendedGamesByUserId();

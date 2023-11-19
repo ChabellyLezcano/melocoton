@@ -7,7 +7,7 @@
       <div class="max-w-90 h-90 mx-auto">
         <div class="rounded-lg" style="height: 100%">
           <img
-  [src]="game.game.photo ? game.game.photo : '../../../../../../assets/empty-box.jpg'"
+  [src]="game.game.photo ? game.game.photo : '../../../../../../assets/default-game-photo'"
   alt="{{ game.game.title }}"
   class="w-90 h-90 rounded-lg object-cover"
 />
@@ -63,8 +63,11 @@
     </button>
   </ng-container>
   <ng-container *ngIf="!isAdmin">
-    <button class="bg-blue-500 text-white rounded-full py-2 px-4">
+    <button class="bg-blue-500 text-white rounded-full py-2 px-4" (click)="createReservation(gameId)">
       Reservar
+    </button>
+    <button class="bg-yellow-500 text-white rounded-full py-2 px-4" (click)="markAsFavorite(gameId)">
+      Marcar como favorito
     </button>
   </ng-container>
 
@@ -91,7 +94,54 @@
     </div>
   </div>
  
-  <div *ngIf="!game" class="text-center p-4">
-    <p class="text-gray-600">Cargando...</p>
-  </div>
 
+<!-- Agregar un contenedor para mostrar las reseñas -->
+<div *ngIf="reviews && reviews.length > 0">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-4">
+    <div *ngFor="let review of reviews" class="bg-gray-100 rounded-lg shadow-lg p-4">
+      <!-- Agregar información del usuario (foto y nombre) en la parte superior izquierda de la card -->
+     <!-- Agregar información del usuario (foto, nombre y fecha) en la parte superior izquierda de la card -->
+<div class="flex items-start mb-4">
+  <!-- Foto del usuario -->
+  <img
+    [src]="review.user.photo ? review.user.photo : '../../../../../../../../assets/profile.png'"
+    alt="Foto de perfil"
+    class="w-12 h-12 rounded-full object-cover"
+  />
+  <!-- Nombre de usuario y fecha (si está disponible) -->
+  <div class="ml-4">
+    <p class="text-gray-800 font-bold">{{ review.user.username }}</p>
+    <p class="text-gray-600">{{ review.date }}</p> <!-- Reemplaza 'review.date' con el campo real de fecha -->
+  </div>
+</div>
+
+
+      <!-- Mostrar información de la reseña (título, descripción, y calificación) -->
+      <h2 class="text-gray-700 font-bold">{{ review.title }}</h2>
+      <p class="text-gray-500">{{ review.description }}</p>
+      
+<!-- Mostrar la calificación en la esquina superior derecha (estrellas) -->
+<!-- Mostrar la calificación en la esquina superior derecha (estrellas) -->
+<div class="flex justify-end">
+  <span class="text-amber-500">Calificación: {{review.rating}}</span>
+  <div class="flex items-center ml-2">
+    <ng-container *ngFor="let i of [].constructor(5); let index = index">
+      <i class="star-icon" [ngClass]="{'filled': index < review.rating}"></i>
+    </ng-container>
+  </div>
+</div>
+
+
+
+      
+    </div>
+  </div>
+</div>
+
+<div *ngIf="(!reviews || reviews.length === 0) && game">
+  <p class="text-gray-600">No hay reseñas para este juego.</p>
+</div>
+
+<div *ngIf="!game">
+  <p class="text-gray-600">Cargando reseñas...</p>
+</div>

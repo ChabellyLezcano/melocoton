@@ -1,7 +1,14 @@
 <app-header></app-header>
-<div *ngIf="recommendedGames && recommendedGames.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 m-4">
+<!-- Botón para generar recomendaciones -->
+<div class="mx-auto text-center mt-4">
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" (click)="generateRecommendedGames()">
+    Generar Recomendaciones
+  </button>
+</div>
+
+<div *ngIf="recommendedGames && recommendedGames.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 m-4 py-3 mt-4">
   <div *ngFor="let game of recommendedGames" class="bg-white rounded-lg shadow-md">
-    <img [src]="game.photo || 'assets/default-game-photo.png'" class="w-full h-48 object-contain rounded-t-lg" alt="Game Image">
+    <img [src]="game.photo || '../../../../../../assets/default-game-photo.jpeg'" class="w-full h-48 object-contain rounded-t-lg" alt="Game Image">
     
     <div class="p-4">
       <h5 class="text-xl font-semibold">{{ game.title }}</h5>

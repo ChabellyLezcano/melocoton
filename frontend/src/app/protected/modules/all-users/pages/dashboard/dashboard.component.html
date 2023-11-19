@@ -18,7 +18,7 @@
     >
     <div class="bg-white rounded-lg shadow-lg p-4">
       <img
-      [src]="game.photo ? game.photo : '../../../../../../assets/empty-box.jpg'"
+      [src]="game.photo ? game.photo : '../../../../../../assets/default-game-photo.jpeg'"
         alt="{{ game?.title }}"
         class="w-full max-h-48 object-contain rounded-t-lg"
         [ngClass]="{'disabled': isGameUnavailable(game)}"
@@ -38,12 +38,15 @@
           <span class="ml-auto"></span>
   
           <button
-            class="bg-blue-500 text-white rounded-full py-2 px-4"
-            [ngStyle]="{'background-color': isGameUnavailable(game) }"
-            (click)="onVerClick(game._id)"
-          >
-            Ver
-          </button>
+  class="text-white rounded-full py-2 px-4"
+  [ngStyle]="{'background-color': (isGameUnavailable(game) && !isAdmin) ? 'gray' : 'blue'}"
+  [disabled]="isGameUnavailable(game) && !isAdmin"
+  (click)="onVerClick(game._id)"
+>
+  Ver
+</button>
+
+        
         </p>
       </div>
     </div>

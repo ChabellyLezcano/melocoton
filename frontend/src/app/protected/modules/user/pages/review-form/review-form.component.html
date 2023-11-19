@@ -1,0 +1,57 @@
+<app-header></app-header>
+<div class="container mt-5">
+    <div class="mx-auto md:w-2/3 lg:w-1/2">
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-center text-2xl font-bold mb-4">Crear Reseña</h2>
+        <form [formGroup]="reviewForm" (ngSubmit)="createReview(gameId)">
+          <!-- Campo de título -->
+          <div class="mb-4">
+            <label for="title" class="block text-sm font-medium text-gray-700">Título</label>
+            <input
+              formControlName="title"
+              type="text"
+              id="title"
+              class="form-input w-full mt-1"
+              required
+            />
+          </div>
+  
+          <!-- Campo de descripción -->
+          <div class="mb-4">
+            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+            <textarea
+              formControlName="description"
+              id="description"
+              class="form-textarea w-full mt-1"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+  
+          <!-- Campo de calificación -->
+          <div class="mb-6">
+            <label for="rating" class="block text-sm font-medium text-gray-700">Calificación (1-5)</label>
+            <input
+              formControlName="rating"
+              type="number"
+              id="rating"
+              class="form-input w-full mt-1"
+              required
+              min="1"
+              max="5"
+            />
+          </div>
+  
+          <!-- Botón para enviar el formulario -->
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-full"
+            [disabled]="reviewForm.invalid"
+          >
+            Crear Reseña
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  

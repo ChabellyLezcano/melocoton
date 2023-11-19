@@ -33,7 +33,7 @@ const createReview = async (req, res) => {
     const completedReservation = await Reservation.findOne({
       user: user,
       game: gameId,
-      status: "Completed",
+      status: "Completada",
     });
 
     if (!completedReservation) {
@@ -180,10 +180,17 @@ const deleteReview = async (req, res) => {
 const getGameReviews = async (req, res) => {
   try {
     const { gameId } = req.params;
-    const reviews = await Review.find({ game: gameId });
+    // Utiliza el método populate para extraer información relacionada de la reseña
+    const reviews = await Review.find({ game: gameId })
+      .populate({
+        path: 'user', // Nombre del campo que hace referencia al usuario
+        select: 'username photo', // Campos que deseas extraer (nombre de usuario y foto)
+      })
+      .exec();
 
     res.json({
       ok: true,
+      msg: "Reseñas encontradas",
       reviews,
     });
   } catch (error) {
@@ -203,6 +210,7 @@ const getUserReviews = async (req, res) => {
 
     res.json({
       ok: true,
+      msg:"Reseñas encontradas",
       reviews,
     });
   } catch (error) {

@@ -1,0 +1,31 @@
+<app-header></app-header>
+<div class="container mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-4">Tus Juegos Favoritos</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 m-4 py-4">
+      <!-- Repite este bloque para cada juego en favoriteGames -->
+      <ng-container *ngFor="let game of favoriteGames">
+        <div class="bg-white rounded-lg shadow-md">
+          <img
+            [src]="game.photo"
+            alt="{{ game.title }}"
+            class="w-full h-48 object-contain rounded-t-lg"
+          />
+          <div class="p-4">
+            <h5 class="text-xl font-semibold">{{ game.title }}</h5>
+            <div class="flex flex-wrap mt-4">
+              <ng-container *ngFor="let tag of game.tags">
+                <span class="bg-gray-200 text-gray-700 text-sm rounded-full px-2 py-1 mr-2 m-1">{{ tag }}</span>
+              </ng-container>
+            </div>
+            <p class="text-gray-700 text-sm mt-4">{{ game.description }}</p>
+            <div class="mx-auto justify-center flex m-4">
+              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 mx-auto rounded-full" (click)="unmarkAsFavorite(game._id)">
+                Quitar de favoritos
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <!-- Fin del bloque repetido -->
+    </div>
+</div>

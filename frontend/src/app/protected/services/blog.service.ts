@@ -112,7 +112,7 @@ export class BlogService {
         localStorage.getItem('token') || ''
       );
   
-      return this.http.put<BlogResponse>(url, { headers }).pipe(
+      return this.http.put<BlogResponse>(url, null, { headers }).pipe(
         catchError((error) => {
           return throwError(error);
         })

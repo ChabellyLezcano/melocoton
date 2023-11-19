@@ -17,6 +17,7 @@ export class DashboardAdminComponent implements OnInit {
   totalRecords: number = 0; // Número total de registros
   rows: number = 20; // Cambiado a 20 juegos por página
   first: number = 0;
+  isAdmin!: boolean
 
   constructor(
     private router: Router,
@@ -29,6 +30,9 @@ export class DashboardAdminComponent implements OnInit {
     this.userDataService.userData$.subscribe((user) => {
       if (user) {
         this.user = user;
+      }
+      if (user?.role === 'Admin') {
+        this.isAdmin = true;
       }
     });
     

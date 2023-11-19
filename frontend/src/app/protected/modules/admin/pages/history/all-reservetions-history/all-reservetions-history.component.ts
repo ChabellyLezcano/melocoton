@@ -147,9 +147,7 @@ markAsPickedUpReservation(reservationId: string) {
           if (response.ok) {
             // La reserva se marcó como "Picked up" con éxito
             Swal.fire('Éxito', response.msg, 'success')
-              .then(() => {
-                this.getAllReservations();
-              });
+              this.getAllReservations()
           } else {
             // Hubo un error al marcar la reserva
             console.error('Error al marcar la reserva como "Picked up". Mensaje: ' + response.msg);
