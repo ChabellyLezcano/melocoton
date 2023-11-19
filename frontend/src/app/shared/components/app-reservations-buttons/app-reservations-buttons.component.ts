@@ -2,8 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-reservations-buttons',
-  templateUrl: './app-reservations-buttons.component.html',
-  styleUrls: ['./app-reservations-buttons.component.css']
+  templateUrl: './app-reservations-buttons.component.html'
 })
 export class AppReservationsButtonsComponent {
 

@@ -2,127 +2,58 @@
 <!-- Title section -->
 <div class="text-xl text-center mb-4">Reservaciones</div>
 <!-- Buttons section -->
-<app-reservations-buttons (filterChanged)="filterReservations($event)"></app-reservations-buttons>
+<app-reservations-buttons
+  (filterChanged)="filterReservations($event)"
+></app-reservations-buttons>
 
+<!-- En tu plantilla principal -->
 <div
   class="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-4 w-full p-4 mb-4"
 >
-  <div *ngFor="let reservation of reservations">
-    <div class="bg-white border rounded-lg shadow-lg flex" style="height: 15.5rem;">
-      <!-- Foto del juego a la izquierda -->
-      <div class="w-1/3 p-4">
-        <div class="w-40 h-40">
-          <img
-            [src]="reservation.game.photo"
-            [alt]="reservation.game.title"
-            class="w-full h-full object-contain"
-          />
-        </div>
-      </div>
+  <app-reservation-item
+    *ngFor="let reservation of reservations"
+    [reservation]="reservation"
+  >
+    <!-- Botones de acción según el estado de la reserva -->
+    <div class="mt-4">
+      <button
+        *ngIf="reservation.status === 'Pendiente de aceptación'"
+        class="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 mr-4"
+        (click)="showAcceptDialog(reservation._id)"
+      >
+        Aceptar
+      </button>
 
-      <!-- Datos a la derecha -->
-      <div class="w-2/3 p-4">
-        <div class="font-bold text-xl mb-2 text-teal-600">
-          {{ reservation.game.title }}
-        </div>
-        <div class="text-sm">
-          <span class="font-semibold">Fecha:</span>
-          <span class="ml-2 text-gray-500">{{
-            reservation.date | date : "dd/MM/yyyy"
-          }}</span>
-        </div>
-        <div class="text-sm">
-          <span class="font-semibold">Hora:</span>
-          <span class="ml-2 text-gray-500">{{
-            reservation.date | date : "HH:mm"
-          }}</span>
-        </div>
-        <div
-          [ngClass]="{
-            'text-sm text-yellow-500':
-              reservation.status === 'Pendiente de aceptación',
-            'text-sm text-green-500': reservation.status === 'Aceptada',
-            'text-sm text-red-500': reservation.status === 'Rechazada',
-            'text-sm text-gray-500': reservation.status === 'Anulada',
-            'text-sm text-purple-500': reservation.status === 'Recogido',
-            'text-sm text-orange-900': reservation.status === 'Expirada',
-            'text-sm text-pink-500': reservation.status === 'Completada'
-          }"
-        >
-          <span class="text-sm text-black font-semibold">Estado:</span>
-          <span class="ml-2 font-semibold">{{ reservation.status }}</span>
-        </div>
-        <div class="text-sm">
-          <span class="font-semibold">Código de la reserva:</span>
-          <span class="ml-2 text-purple-500">{{ reservation.code }}</span>
-        </div>
-        <div class="text-sm">
-          <span class="font-semibold">Código de juego:</span>
-          <span class="ml-2 text-sky-500">{{ reservation.game.code }}</span>
-        </div>
-        <div class="text-sm">
-          <span class="font-semibold">Usuario:</span>
-          <span class="ml-2 text-gray-500">{{
-            reservation.user.username
-          }}</span>
-        </div>
-        <!-- Mostrar rejectionReason si el estado es 'Rejected' -->
-        <div class="text-sm" *ngIf="reservation.status === 'Rechazada'">
-          <span class="font-semibold">Motivo de Rechazo:</span>
-          <span class="ml-2 text-red-500">{{
-            reservation.rejectionReason
-          }}</span>
-        </div>
-        <!-- Mostrar expirationDate si el estado es 'Accepted' -->
-        <div class="text-sm" *ngIf="reservation.status === 'Aceptada'">
-          <span class="font-semibold">Fecha de Vencimiento:</span>
-          <span class="ml-2 text-green-500">{{
-            reservation.expirationDate | date : "dd/MM/yyyy"
-          }}</span>
-        </div>
-
-        <!-- Botones de acción según el estado de la reserva -->
-        <div class="mt-4">
-          <button
-            *ngIf="reservation.status === 'Pendiente de aceptación'"
-            class="bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600 mr-4"
-            (click)="showAcceptDialog(reservation._id)"
-          >
-            Aceptar
-          </button>
-
-          <button
-            *ngIf="reservation.status === 'Pendiente de aceptación'"
-            class="bg-red-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-red-600"
-            (click)="showRejectDialog(reservation._id)"
-          >
-            Rechazar
-          </button>
-          <button
-            *ngIf="reservation.status === 'Aceptada'"
-            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-blue-600 mr-4"
-            (click)="markAsPickedUpReservation(reservation._id)"
-          >
-            Recoger
-          </button>
-          <button
-            *ngIf="reservation.status === 'Acptada'"
-            class="bg-orange-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-orange-600"
-            (click)="showRejectDialog(reservation._id)"
-          >
-            Cancelar
-          </button>
-          <button
-            *ngIf="reservation.status === 'Recogido'"
-            class="bg-pink-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-pink-600"
-            (click)="markAsCompletedReservation(reservation._id)"
-          >
-            Completada
-          </button>
-        </div>
-      </div>
+      <button
+        *ngIf="reservation.status === 'Pendiente de aceptación'"
+        class="bg-red-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-red-600"
+        (click)="showRejectDialog(reservation._id)"
+      >
+        Rechazar
+      </button>
+      <button
+        *ngIf="reservation.status === 'Aceptada'"
+        class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-blue-600 mr-4"
+        (click)="markAsPickedUpReservation(reservation._id)"
+      >
+        Recoger
+      </button>
+      <button
+        *ngIf="reservation.status === 'Acptada'"
+        class="bg-orange-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-orange-600"
+        (click)="showRejectDialog(reservation._id)"
+      >
+        Cancelar
+      </button>
+      <button
+        *ngIf="reservation.status === 'Recogido'"
+        class="bg-pink-500 text-white font-semibold py-2 px-4 rounded-full hover-bg-pink-600"
+        (click)="markAsCompletedReservation(reservation._id)"
+      >
+        Completada
+      </button>
     </div>
-  </div>
+  </app-reservation-item>
 </div>
 
 <!-- Diálogo de aceptación de reserva -->

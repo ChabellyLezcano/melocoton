@@ -1,0 +1,62 @@
+<!-- reservation-item.component.html -->
+
+<div class="bg-white border rounded-lg shadow-lg flex" style="height: 15.5rem;">
+    <!-- Foto del juego a la izquierda -->
+    <div class="w-1/3 p-4">
+      <div class="w-40 h-40">
+        <img [src]="reservation.game.photo" [alt]="reservation.game.title" class="w-full h-full object-contain" />
+      </div>
+    </div>
+  
+    <!-- Datos a la derecha -->
+    <div class="w-2/3 p-4">
+      <div class="font-bold text-xl mb-2 text-teal-600">
+        {{ reservation.game.title }}
+      </div>
+      <div class="text-sm">
+        <span class="font-semibold">Fecha:</span>
+        <span class="ml-2 text-gray-500">{{ reservation.date | date : "dd/MM/yyyy" }}</span>
+      </div>
+      <div class="text-sm">
+        <span class="font-semibold">Hora:</span>
+        <span class="ml-2 text-gray-500">{{ reservation.date | date : "HH:mm" }}</span>
+      </div>
+      <div
+        [ngClass]="{
+          'text-sm text-yellow-500': reservation.status === 'Pendiente de aceptación',
+          'text-sm text-green-500': reservation.status === 'Aceptada',
+          'text-sm text-red-500': reservation.status === 'Rechazada',
+          'text-sm text-gray-500': reservation.status === 'Anulada',
+          'text-sm text-purple-500': reservation.status === 'Recogido',
+          'text-sm text-orange-900': reservation.status === 'Expirada',
+          'text-sm text-pink-500': reservation.status === 'Completada'
+        }"
+      >
+        <span class="text-sm text-black font-semibold">Estado:</span>
+        <span class="ml-2 font-semibold">{{ reservation.status }}</span>
+      </div>
+      <div class="text-sm">
+        <span class="font-semibold">Código de la reserva:</span>
+        <span class="ml-2 text-purple-500">{{ reservation.code }}</span>
+      </div>
+      <div class="text-sm">
+        <span class="font-semibold">Código de juego:</span>
+        <span class="ml-2 text-sky-500">{{ reservation.game.code }}</span>
+      </div>
+      <div class="text-sm">
+        <span class="font-semibold">Usuario:</span>
+        <span class="ml-2 text-gray-500">{{ reservation.user.username }}</span>
+      </div>
+      <!-- Mostrar rejectionReason si el estado es 'Rejected' -->
+      <div class="text-sm" *ngIf="reservation.status === 'Rechazada'">
+        <span class="font-semibold">Motivo de Rechazo:</span>
+        <span class="ml-2 text-red-500">{{ reservation.rejectionReason }}</span>
+      </div>
+      <!-- Mostrar expirationDate si el estado es 'Accepted' -->
+      <div class="text-sm" *ngIf="reservation.status === 'Aceptada'">
+        <span class="font-semibold">Fecha de Vencimiento:</span>
+        <span class="ml-2 text-green-500">{{ reservation.expirationDate | date : "dd/MM/yyyy" }}</span>
+      </div>
+    </div>
+  </div>
+  

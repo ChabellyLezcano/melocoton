@@ -5,6 +5,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarAdminComponent } from './components/sidebar-admin/sidebar-admin.component';
 import { SidebarUserComponent } from './components/sidebar-user/sidebar-user.component';
 import { AppReservationsButtonsComponent } from './components/app-reservations-buttons/app-reservations-buttons.component';
+import { ReservationItemComponent } from './components/reservation-item/reservation-item.component';
 
 
 @NgModule({
@@ -12,12 +13,13 @@ import { AppReservationsButtonsComponent } from './components/app-reservations-b
     HeaderComponent,
     SidebarAdminComponent,
     SidebarUserComponent,
-    AppReservationsButtonsComponent
+    AppReservationsButtonsComponent,
+    ReservationItemComponent
   ],
   imports: [
     CommonModule,
     PrimeNgModule
   ],
-  exports: [ HeaderComponent, SidebarAdminComponent, AppReservationsButtonsComponent ]
+  exports: [ HeaderComponent, SidebarAdminComponent, AppReservationsButtonsComponent, ReservationItemComponent ]
 })
 export class SharedModule { }
