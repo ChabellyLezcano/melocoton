@@ -19,7 +19,7 @@ export class RecommendationService {
     const url = `${this.baseUrl}/recommendation/generate-recommended-games`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.post<RecommendationResponse>(url, null, { headers });
@@ -35,5 +35,4 @@ export class RecommendationService {
 
     return this.http.get<RecommendationResponse>(url, { headers });
   }
-
 }

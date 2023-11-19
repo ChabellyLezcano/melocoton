@@ -27,7 +27,7 @@ export class ReservationUserService {
     const url = `${this.baseUrl}/reservationUser/reservations`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     return this.http.get<ReservationResponse>(url, { headers });
   }

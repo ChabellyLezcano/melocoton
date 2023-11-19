@@ -22,7 +22,7 @@ export class GameService {
 
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.get<GameResponse>(url, { headers, params });
@@ -33,7 +33,7 @@ export class GameService {
     const url = `${this.baseUrl}/game/get-game/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     return this.http.get<GameResponse>(url, { headers });
   }
@@ -43,7 +43,7 @@ export class GameService {
     const url = `${this.baseUrl}/game/add-game`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.post<Game>(url, game, { headers }).pipe(
@@ -58,7 +58,7 @@ export class GameService {
     const url = `${this.baseUrl}/game/edit-game/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.put<GameResponse>(url, game, { headers });
@@ -69,7 +69,7 @@ export class GameService {
     const url = `${this.baseUrl}/game/delete-game/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.delete<void>(url, { headers }).pipe(
@@ -87,7 +87,7 @@ export class GameService {
 
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.put<GameResponse>(url, formData, { headers });

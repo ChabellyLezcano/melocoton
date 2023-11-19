@@ -57,7 +57,7 @@ export class ReservationService {
     const url = `${this.baseUrl}/reservationAdmin/reject-reservation/${reservationId}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     const body = { rejectionReason };
 

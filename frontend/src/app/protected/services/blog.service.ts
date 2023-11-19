@@ -19,7 +19,7 @@ export class BlogService {
 
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.get<BlogResponse>(url, { headers });
@@ -30,7 +30,7 @@ export class BlogService {
     const url = `${this.baseUrl}/blog/get-article/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     return this.http.get<BlogResponse>(url, { headers });
   }
@@ -40,7 +40,7 @@ export class BlogService {
     const url = `${this.baseUrl}/blog/add-article`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.post<BlogResponse>(url, article, { headers }).pipe(
@@ -55,7 +55,7 @@ export class BlogService {
     const url = `${this.baseUrl}/blog/edit-article/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.put<BlogResponse>(url, article, { headers });
@@ -66,7 +66,7 @@ export class BlogService {
     const url = `${this.baseUrl}/blog/delete-article/${id}`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.delete<BlogResponse>(url, { headers }).pipe(
@@ -83,7 +83,7 @@ export class BlogService {
 
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
 
     return this.http.put<BlogResponse>(url, formData, { headers });
@@ -94,7 +94,7 @@ export class BlogService {
       const url = `${this.baseUrl}/blog/like-article/${id}`;
       const headers = new HttpHeaders().set(
         'token',
-        localStorage.getItem('token') || ''
+        localStorage.getItem('token') ?? ''
       );
   
       return this.http.put<BlogResponse>(url, null, { headers }).pipe(
@@ -109,7 +109,7 @@ export class BlogService {
       const url = `${this.baseUrl}/blog/unlike-article/${id}`;
       const headers = new HttpHeaders().set(
         'token',
-        localStorage.getItem('token') || ''
+        localStorage.getItem('token') ?? ''
       );
   
       return this.http.put<BlogResponse>(url, null, { headers }).pipe(

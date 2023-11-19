@@ -6,17 +6,17 @@ import { AuthResponse, User } from 'src/app/auth/interfaces/authInterface';
 import { UserResponse } from '../interfaces/userInterface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-    private baseUrl: string = environment.baseUrl; // Ajusta la URL de tu API
+  private baseUrl: string = environment.baseUrl; // Ajusta la URL de tu API
 
   constructor(private http: HttpClient) {}
 
   listUsers(): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/list-users`;
     const headers = new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      token: localStorage.getItem('token') || '',
     });
 
     return this.http.get<UserResponse>(url, { headers });
@@ -25,7 +25,7 @@ export class UserService {
   changeToAdmin(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-to-admin/${userId}`;
     const headers = new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      token: localStorage.getItem('token') || '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });
@@ -34,7 +34,7 @@ export class UserService {
   changeToCurrent(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-to-current/${userId}`;
     const headers = new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      token: localStorage.getItem('token') ?? '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });
@@ -43,18 +43,16 @@ export class UserService {
   changeAccountStatusToBlocked(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-account-status-to-blocked/${userId}`;
     const headers = new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      token: localStorage.getItem('token') || '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });
   }
 
-
-
   changeAccountStatusToActive(userId: string): Observable<UserResponse> {
     const url = `${this.baseUrl}/user/change-account-status-to-active/${userId}`;
     const headers = new HttpHeaders({
-      'token': localStorage.getItem('token') || ''
+      token: localStorage.getItem('token') || '',
     });
 
     return this.http.post<UserResponse>(url, null, { headers });

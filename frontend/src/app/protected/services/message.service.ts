@@ -17,7 +17,7 @@ export class MessageService {
     const url = `${this.baseUrl}/forum/create-message`;
     const headers = new HttpHeaders().set(
       'token',
-      localStorage.getItem('token') || ''
+      localStorage.getItem('token') ?? ''
     );
     const body = { text }; // Debes adaptar esto a la estructura requerida por tu backend.
 

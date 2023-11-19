@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReviewResponse } from 'src/app/protected/interfaces/reviewInterface';
-import { ReservationUserService } from 'src/app/protected/services/reservationUser.service';
 import { ReviewService } from 'src/app/protected/services/review.service';
 import Swal from 'sweetalert2';
 
