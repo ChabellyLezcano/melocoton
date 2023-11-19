@@ -8,8 +8,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-review-form',
-  templateUrl: './review-form.component.html',
-  styleUrls: ['./review-form.component.css']
+  templateUrl: './review-form.component.html'
 })
 export class ReviewFormComponent {
 

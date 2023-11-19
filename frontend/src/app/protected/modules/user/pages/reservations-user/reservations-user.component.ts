@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Game } from 'src/app/protected/interfaces/gameInterface';
 import { Reservation, ReservationResponse } from 'src/app/protected/interfaces/reservationInterface';
 import { ReservationService } from 'src/app/protected/services/reservationAdmin.service';
 import { ReservationUserService } from 'src/app/protected/services/reservationUser.service';
