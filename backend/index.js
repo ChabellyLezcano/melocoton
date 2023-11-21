@@ -46,11 +46,10 @@ app.use("/api/game", require("./routes/gameboard"));
 app.use("/api/reservationAdmin", require("./routes/reservationAdmin"));
 app.use("/api/reservationUser", require("./routes/reservationUser"));
 app.use("/api/review", require("./routes/review"));
-app.use("/api/forum", require("./routes/message_forum"));
 app.use("/api/favorite", require("./routes/listFavorite"));
 app.use("/api/recommendation", require("./routes/recommendation"));
 app.use("/api/user", require("./routes/user"));
-app.use("/api/blog", require("./routes/blog"));
+
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;

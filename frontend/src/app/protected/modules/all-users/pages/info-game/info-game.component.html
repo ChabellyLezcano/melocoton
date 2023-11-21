@@ -126,7 +126,7 @@
   <span class="text-amber-500">Calificación: {{review.rating}}</span>
   <div class="flex items-center ml-2">
     <ng-container *ngFor="let i of [].constructor(5); let index = index">
-      <i class="star-icon" [ngClass]="{'filled': index < review.rating}"></i>
+      <i class="star-icon"></i>
     </ng-container>
   </div>
 </div>

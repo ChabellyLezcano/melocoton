@@ -11,11 +11,7 @@ import { AddGameComponent } from './pages/games/add-game/add-game.component';
 import { UploadPhotoGameComponent } from './pages/games/upload-photo-game/upload-photo-game.component';
 import { AllReservetionsHistoryComponent } from './pages/history/all-reservetions-history/all-reservetions-history.component';
 import { ListUsersComponent } from './pages/list-users/list-users.component';
-import { ForumComponent } from '../all-users/pages/forum/forum.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { AddArticleComponent } from './pages/add-article/add-article.component';
-import { UploadPhotoArticleComponent } from './pages/upload-photo-article/upload-photo-article.component';
-import { EditArticleComponent } from './pages/edit-article/edit-article.component';
 
 
 @NgModule({
@@ -26,11 +22,7 @@ import { EditArticleComponent } from './pages/edit-article/edit-article.componen
     AddGameComponent,
     UploadPhotoGameComponent,
     AllReservetionsHistoryComponent,
-    ListUsersComponent,
-    ForumComponent,
-    AddArticleComponent,
-    UploadPhotoArticleComponent,
-    EditArticleComponent
+    ListUsersComponent
   ],
   imports: [
     CommonModule,
